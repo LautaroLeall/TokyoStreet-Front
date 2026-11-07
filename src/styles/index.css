@@ -1,0 +1,314 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-navy-950: #0c0030;
+  --bg-navy-900: #18003c;
+  --bg-navy-800: #241552;
+  --neon-pink-500: #f00078;
+  --neon-pink-600: #cc0060;
+  --neon-cyan-300: #84f0fc;
+  --neon-cyan-400: #54d8fc;
+  --glow-pink: 0 0 10px rgba(240, 0, 120, 0.55), 0 0 28px rgba(240, 0, 120, 0.28);
+  --glow-cyan: 0 0 10px rgba(132, 240, 252, 0.5), 0 0 28px rgba(84, 216, 252, 0.25);
+  --text-glow-pink: 0 0 12px rgba(240, 0, 120, 0.58);
+  --text-glow-cyan: 0 0 12px rgba(132, 240, 252, 0.52);
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #0c0030;
+  color: #ffffff;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: #0c0030;
+  overflow-x: clip;
+}
+
+/* Bloqueo total del scroll externo cuando un modal o menú móvil está activo */
+html.is-scroll-locked,
+html.is-scroll-locked body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+/* Barra de scroll general Cyber-Tokyo (fina, cápsula degradada neón sobre fondo nocturno) */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080020;
+  border-left: 1px solid rgba(132, 240, 252, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  border: 1px solid rgba(12, 0, 48, 0.65);
+  background: linear-gradient(180deg, #f00078 0%, #7a1cff 52%, #54d8fc 100%);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff4fa3 0%, #84f0fc 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: #080020;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #f00078 #080020;
+  }
+}
+
+/* Cursor personalizado Cyber-Anime en dispositivos con puntero fino */
+@media (hover: hover) and (pointer: fine) {
+
+  html.has-cyber-cursor,
+  html.has-cyber-cursor *,
+  html.has-cyber-cursor *::before,
+  html.has-cyber-cursor *::after {
+    cursor: none !important;
+  }
+}
+
+/* Tipografía japonesa y numérica con contorno neón editorial (anti-look IA) */
+.text-stroke-cyan {
+  -webkit-text-stroke: 1px rgba(132, 240, 252, 0.42);
+  color: transparent;
+}
+
+.text-stroke-pink {
+  -webkit-text-stroke: 1px rgba(240, 0, 120, 0.55);
+  color: transparent;
+}
+
+/* Foco accesible obligatorio: anillo cian 3px con separación (06_DISENO_UI_UX.md §9) */
+:focus-visible {
+  outline: 3px solid #84f0fc;
+  outline-offset: 3px;
+}
+
+/* Evita zoom automático en iOS Safari manteniendo >=16px en controles de entrada */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* Títulos fluidos equilibrados que nunca cortan palabras a mitad */
+.heading-fluid-section {
+  font-size: clamp(1.38rem, 3.8vw, 2.35rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+/* Retícula metálica tenue inspirada en los paneles del set de fotos (6–8% opacidad) */
+.bg-street-grid {
+  background-image:
+    linear-gradient(to right, rgba(132, 240, 252, 0.065) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(132, 240, 252, 0.065) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+/* Líneas de velocidad diagonales estilo manga/anime japonés en cian/rosa ultra sutiles */
+.bg-anime-speedlines {
+  background-image: repeating-linear-gradient(-32deg,
+      transparent 0px,
+      transparent 38px,
+      rgba(132, 240, 252, 0.032) 38px,
+      rgba(132, 240, 252, 0.032) 39px,
+      transparent 39px,
+      transparent 86px,
+      rgba(240, 0, 120, 0.035) 86px,
+      rgba(240, 0, 120, 0.035) 87px);
+}
+
+.text-glow-pink {
+  text-shadow: var(--text-glow-pink);
+}
+
+.text-glow-cyan {
+  text-shadow: var(--text-glow-cyan);
+}
+
+/* Primitivas CSS 3D aceleradas por GPU */
+.perspective-stage {
+  perspective: 1100px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.translate-z-24 {
+  transform: translateZ(24px);
+}
+
+.translate-z-36 {
+  transform: translateZ(36px);
+}
+
+/* Barrido láser sobre botones y pases holográficos */
+.btn-laser-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-laser-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 55%;
+  transform: translateX(-180%) skewX(-22deg);
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.24) 50%,
+      transparent 100%);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.btn-laser-sheen:hover::after {
+  transform: translateX(340%) skewX(-22deg);
+}
+
+/* Muescas laterales estilo ticket perforado (para Ticket Ganador y Preventa) */
+.ticket-notches {
+  position: relative;
+}
+
+.ticket-notches::before,
+.ticket-notches::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background-color: #0c0030;
+  border: 1px solid rgba(132, 240, 252, 0.24);
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ticket-notches::before {
+  left: -11px;
+}
+
+.ticket-notches::after {
+  right: -11px;
+}
+
+/* Ocultación limpia de barra de scroll en modales, vistas previas y carruseles */
+.no-scrollbar::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Cinta marquesina continua del Hero (pausa al apoyar el cursor) */
+@keyframes marqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+  will-change: transform;
+}
+
+.marquee-wrapper:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Anillos 3D orbitales para el portal neón y preloader */
+@keyframes orbitRingPink {
+  0% {
+    transform: rotateX(68deg) rotateY(-12deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(68deg) rotateY(-12deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbitRingCyan {
+  0% {
+    transform: rotateX(62deg) rotateY(22deg) rotateZ(360deg);
+  }
+
+  100% {
+    transform: rotateX(62deg) rotateY(22deg) rotateZ(0deg);
+  }
+}
+
+@keyframes floatSlow {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -7px, 0);
+  }
+}
+
+.animate-orbit-pink {
+  animation: orbitRingPink 9s linear infinite;
+}
+
+.animate-orbit-cyan {
+  animation: orbitRingCyan 12s linear infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 4.8s ease-in-out infinite;
+}
+
+/* Respeto estricto de prefers-reduced-motion (04_FUNCIONES F-08 / 06_DISENO §9) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
