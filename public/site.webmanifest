@@ -1,0 +1,28 @@
+{
+  "name": "Tokyo Street — 3.ª Edición",
+  "short_name": "Tokyo Street",
+  "description": "Festival de anime, K-Pop, cosplay y cultura pop asiática en San Miguel de Tucumán + Pasaporte Digital de 15 Sellos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0C0030",
+  "theme_color": "#0C0030",
+  "lang": "es-AR",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

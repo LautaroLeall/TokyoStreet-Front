@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /stand
+Disallow: /org
+Disallow: /s/
+
+Sitemap: https://tokyostreet.com.ar/sitemap.xml
