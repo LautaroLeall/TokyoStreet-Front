@@ -15,5 +15,7 @@ const KNOWN_ROUTE_PATTERNS = [
  * devuelve false cuando caerá en el comodín `*` (NotFoundPage 404).
  */
 export function isKnownAppRoute(pathname) {
-  return KNOWN_ROUTE_PATTERNS.some((pattern) => Boolean(matchPath(pattern, pathname)));
+  return KNOWN_ROUTE_PATTERNS.some((pattern) =>
+    Boolean(matchPath(pattern, pathname)),
+  );
 }
