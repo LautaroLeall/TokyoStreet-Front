@@ -76,10 +76,7 @@ export default function PassportEntryPage() {
           <span>Volver al inicio</span>
         </NeonButton>
 
-        <HexBadge
-          tone={timing.phase === "live" ? "ok" : "warn"}
-          icon={Clock}
-        >
+        <HexBadge tone={timing.phase === "live" ? "ok" : "warn"} icon={Clock}>
           {timing.phase === "live" ? "Juego activo" : "En pausa · Activa 13/12"}
         </HexBadge>
       </RevealBlock>
@@ -281,7 +278,10 @@ export default function PassportEntryPage() {
                             onClick={stampNext}
                             className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill border border-pink-400/55 bg-pink-600 px-3 py-1.5 font-semibold text-white shadow-glow-pink-sm transition hover:bg-pink-500"
                           >
-                            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                            <Sparkles
+                              className="h-3.5 w-3.5"
+                              aria-hidden="true"
+                            />
                             <span>Estampar +1</span>
                           </button>
                           <button
@@ -304,7 +304,10 @@ export default function PassportEntryPage() {
                           onClick={() => resetStamps(false)}
                           className="inline-flex items-center gap-1 whitespace-nowrap rounded-pill border border-white/15 bg-navy-950/90 px-3 py-1.5 font-semibold text-lilac-300 transition hover:border-cyan-300/50 hover:text-white"
                         >
-                          <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                          <RotateCcw
+                            className="h-3.5 w-3.5"
+                            aria-hidden="true"
+                          />
                           <span>Vaciar grilla</span>
                         </button>
                       ) : null}
