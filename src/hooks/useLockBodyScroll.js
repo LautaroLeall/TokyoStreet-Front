@@ -25,7 +25,9 @@ function isInteractiveOrEditable(el) {
     tag === "BUTTON" ||
     tag === "A" ||
     el.isContentEditable ||
-    Boolean(el.closest("button, a, [role='button'], [role='radio'], [role='tab']"))
+    Boolean(
+      el.closest("button, a, [role='button'], [role='radio'], [role='tab']"),
+    )
   );
 }
 
