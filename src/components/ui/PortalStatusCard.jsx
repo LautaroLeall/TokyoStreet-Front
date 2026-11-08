@@ -5,14 +5,12 @@ import { Tilt3DCard } from "@/components/ui/Tilt3DCard";
 const TONE_STYLES = {
   cyan: {
     orbit: "animate-orbit-cyan border-cyan-300/65",
-    iconBox:
-      "border-cyan-300/45 bg-navy-950 text-cyan-300 shadow-glow-cyan-sm",
+    iconBox: "border-cyan-300/45 bg-navy-950 text-cyan-300 shadow-glow-cyan-sm",
     cardVariant: "cyan",
   },
   pink: {
     orbit: "animate-orbit-pink border-pink-400/70",
-    iconBox:
-      "border-pink-400/50 bg-navy-950 text-pink-400 shadow-glow-pink-sm",
+    iconBox: "border-pink-400/50 bg-navy-950 text-pink-400 shadow-glow-pink-sm",
     cardVariant: "featured",
   },
   warn: {
