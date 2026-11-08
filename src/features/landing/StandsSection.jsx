@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,58 +8,58 @@ import {
   MessageCircle,
   RotateCcw,
   Store,
-} from 'lucide-react';
-import { EVENT_CONFIG } from '@/content/event.config';
-import { NeonButton } from '@/components/ui/NeonButton';
-import { RevealBlock } from '@/components/ui/RevealMotion';
-import { ScrollPushSection } from '@/components/ui/ScrollStage3D';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+} from "lucide-react";
+import { EVENT_CONFIG } from "@/content/event.config";
+import { NeonButton } from "@/components/ui/NeonButton";
+import { RevealBlock } from "@/components/ui/RevealMotion";
+import { ScrollPushSection } from "@/components/ui/ScrollStage3D";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
   AnimatedCopyButton,
   StampConfirmationBurst,
-} from '@/components/ui/StampConfirmationBurst';
-import { useToast } from '@/hooks/useToast';
-import { fireTokyoConfetti } from '@/lib/confettiBurst';
+} from "@/components/ui/StampConfirmationBurst";
+import { useToast } from "@/hooks/useToast";
+import { fireTokyoConfetti } from "@/lib/confettiBurst";
 import {
   validateArWhatsapp,
   validateBrandName,
   validateFullName,
   validateInstagramHandle,
   validateStandProposal,
-} from '@/lib/validators';
-import { buildWhatsAppUrl, formatStandInquiryMessage } from '@/lib/whatsapp';
-import { StandLive3DPass } from './StandLive3DPass';
+} from "@/lib/validators";
+import { buildWhatsAppUrl, formatStandInquiryMessage } from "@/lib/whatsapp";
+import { StandLive3DPass } from "./StandLive3DPass";
 import {
   StandStepIdentity,
   StandStepProposal,
   StandStepSpace,
-} from './StandWizardSteps';
+} from "./StandWizardSteps";
 
-const DRAFT_STORAGE_KEY = 'ts3_stand_wizard_draft_v3';
+const DRAFT_STORAGE_KEY = "ts3_stand_wizard_draft_v3";
 
 const INITIAL_STAND_FORM = {
-  brandName: '',
-  contactName: '',
-  whatsapp: '',
-  instagram: '',
+  brandName: "",
+  contactName: "",
+  whatsapp: "",
+  instagram: "",
   noInstagram: false,
-  category: '',
-  secondaryCategory: '',
-  spacePreference: '1 Puesto estándar',
-  experience: '1.ª vez en Tokyo Street',
+  category: "",
+  secondaryCategory: "",
+  spacePreference: "1 Puesto estándar",
+  experience: "1.ª vez en Tokyo Street",
   extras: [],
-  description: '',
+  description: "",
   acceptedTerms: false,
 };
 
 const WIZARD_STEPS = [
-  { num: 1, title: 'Identidad', shortLabel: '01 · Identidad' },
-  { num: 2, title: 'Rubro y espacio', shortLabel: '02 · Espacio' },
-  { num: 3, title: 'Catálogo y envío', shortLabel: '03 · Propuesta' },
+  { num: 1, title: "Identidad", shortLabel: "01 · Identidad" },
+  { num: 2, title: "Rubro y espacio", shortLabel: "02 · Espacio" },
+  { num: 3, title: "Catálogo y envío", shortLabel: "03 · Propuesta" },
 ];
 
 function loadSavedDraft() {
-  if (typeof window === 'undefined') return INITIAL_STAND_FORM;
+  if (typeof window === "undefined") return INITIAL_STAND_FORM;
   try {
     const raw = sessionStorage.getItem(DRAFT_STORAGE_KEY);
     if (!raw) return INITIAL_STAND_FORM;
@@ -79,7 +79,7 @@ export function StandsSection() {
   const [step, setStep] = useState(1);
   const [touched, setTouched] = useState({});
   const [shakeKey, setShakeKey] = useState(0);
-  const [submittedMessage, setSubmittedMessage] = useState('');
+  const [submittedMessage, setSubmittedMessage] = useState("");
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -93,23 +93,32 @@ export function StandsSection() {
   const errors = useMemo(
     () => ({
       brandName: validateBrandName(form.brandName),
-      contactName: validateFullName(form.contactName, { requireLastName: true }),
+      contactName: validateFullName(form.contactName, {
+        requireLastName: true,
+      }),
       whatsapp: validateArWhatsapp(form.whatsapp),
       instagram: form.noInstagram
         ? null
         : validateInstagramHandle(form.instagram, { required: true }),
-      category: form.category ? null : 'Seleccioná el rubro principal de tu stand.',
-      spacePreference: form.spacePreference ? null : 'Elegí el formato de espacio.',
+      category: form.category
+        ? null
+        : "Seleccioná el rubro principal de tu stand.",
+      spacePreference: form.spacePreference
+        ? null
+        : "Elegí el formato de espacio.",
       description: validateStandProposal(form.description),
       acceptedTerms: form.acceptedTerms
         ? null
-        : 'Debés confirmar que comprendés las condiciones de consulta.',
+        : "Debés confirmar que comprendés las condiciones de consulta.",
     }),
-    [form]
+    [form],
   );
 
   const step1Valid =
-    !errors.brandName && !errors.contactName && !errors.whatsapp && !errors.instagram;
+    !errors.brandName &&
+    !errors.contactName &&
+    !errors.whatsapp &&
+    !errors.instagram;
   const step2Valid = !errors.category && !errors.spacePreference;
   const step3Valid = !errors.description && !errors.acceptedTerms;
 
@@ -134,7 +143,7 @@ export function StandsSection() {
         editionLabel: brand.edition,
         ...form,
       }),
-    [brand.edition, form]
+    [brand.edition, form],
   );
 
   const handleFieldChange = (key, value) => {
@@ -161,7 +170,7 @@ export function StandsSection() {
     setForm((prev) => {
       const current = prev.description.trim();
       if (current.toLowerCase().includes(chipText.toLowerCase())) return prev;
-      const separator = current ? (current.endsWith('.') ? ' ' : ', ') : '';
+      const separator = current ? (current.endsWith(".") ? " " : ", ") : "";
       const next = `${current}${separator}${chipText}`.slice(0, 240);
       return { ...prev, description: next };
     });
@@ -204,9 +213,10 @@ export function StandsSection() {
     if (!triggerStepValidation(step)) {
       setShakeKey((prev) => prev + 1);
       showToast({
-        variant: 'warning',
-        title: 'Revisá los campos marcados',
-        description: 'Completá los datos obligatorios de este paso antes de avanzar.',
+        variant: "warning",
+        title: "Revisá los campos marcados",
+        description:
+          "Completá los datos obligatorios de este paso antes de avanzar.",
       });
       return;
     }
@@ -232,7 +242,7 @@ export function StandsSection() {
   const handleResetAll = () => {
     setForm(INITIAL_STAND_FORM);
     setTouched({});
-    setSubmittedMessage('');
+    setSubmittedMessage("");
     setCopied(false);
     setStep(1);
     try {
@@ -254,9 +264,9 @@ export function StandsSection() {
       else if (!step2Valid) setStep(2);
       setShakeKey((prev) => prev + 1);
       showToast({
-        variant: 'error',
-        title: 'Faltan datos por validar',
-        description: 'Corregí los campos resaltados para generar tu solicitud.',
+        variant: "error",
+        title: "Faltan datos por validar",
+        description: "Corregí los campos resaltados para generar tu solicitud.",
       });
       return;
     }
@@ -266,11 +276,12 @@ export function StandsSection() {
     fireTokyoConfetti({ particleCount: 65, spread: 72, origin: { y: 0.7 } });
 
     if (waUrl) {
-      window.open(waUrl, '_blank', 'noopener,noreferrer');
+      window.open(waUrl, "_blank", "noopener,noreferrer");
       showToast({
-        variant: 'success',
-        title: 'Abriendo WhatsApp de reservas',
-        description: 'Enviá la ficha preparada para consultar disponibilidad con la organización.',
+        variant: "success",
+        title: "Abriendo WhatsApp de reservas",
+        description:
+          "Enviá la ficha preparada para consultar disponibilidad con la organización.",
       });
       setSubmittedMessage(liveMessage);
       return;
@@ -279,9 +290,10 @@ export function StandsSection() {
     setCopied(false);
     setSubmittedMessage(liveMessage);
     showToast({
-      variant: 'success',
-      title: '¡Credencial y consulta listas!',
-      description: 'Copiá tu ficha completa o enviala al canal oficial de Tokyo Street.',
+      variant: "success",
+      title: "¡Credencial y consulta listas!",
+      description:
+        "Copiá tu ficha completa o enviala al canal oficial de Tokyo Street.",
     });
   };
 
@@ -292,13 +304,13 @@ export function StandsSection() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2600);
       showToast({
-        variant: 'success',
-        title: 'Ficha copiada al portapapeles',
+        variant: "success",
+        title: "Ficha copiada al portapapeles",
       });
     } catch {
       showToast({
-        variant: 'warning',
-        title: 'Seleccioná y copiá el texto manualmente',
+        variant: "warning",
+        title: "Seleccioná y copiá el texto manualmente",
       });
     }
   };
@@ -315,19 +327,28 @@ export function StandsSection() {
             showKanji
           />
 
-          {form.brandName || form.contactName || form.category || form.description ? (
+          {form.brandName ||
+          form.contactName ||
+          form.category ||
+          form.description ? (
             <button
               type="button"
               onClick={handleResetAll}
               className="inline-flex items-center gap-1.5 self-start whitespace-nowrap font-mono text-xs font-semibold text-lilac-300 transition hover:text-pink-400 sm:self-auto"
             >
-              <RotateCcw className="h-3.5 w-3.5 text-pink-400" aria-hidden="true" />
+              <RotateCcw
+                className="h-3.5 w-3.5 text-pink-400"
+                aria-hidden="true"
+              />
               <span>Reiniciar datos</span>
             </button>
           ) : null}
         </div>
 
-        <RevealBlock delay={0.06} className="mt-10 grid grid-cols-1 items-start gap-10 lg:grid-cols-12">
+        <RevealBlock
+          delay={0.06}
+          className="mt-10 grid grid-cols-1 items-start gap-10 lg:grid-cols-12"
+        >
           {/* Columna Izquierda ABIERTA (sin tarjeta exterior pesada): pasos con subrayado láser */}
           <div className="lg:col-span-7">
             <motion.div
@@ -359,19 +380,22 @@ export function StandsSection() {
                       role="tab"
                       aria-selected={isCurrent}
                       onClick={() => {
-                        if (submittedMessage) setSubmittedMessage('');
+                        if (submittedMessage) setSubmittedMessage("");
                         jumpToStep(s.num);
                       }}
                       className={`relative flex min-h-[46px] items-center justify-center gap-1.5 whitespace-nowrap px-2 pb-3 pt-1 font-mono text-xs font-bold uppercase tracking-wider transition-colors ${
                         isCurrent
-                          ? 'text-white'
+                          ? "text-white"
                           : isDone
-                            ? 'text-ok hover:text-white'
-                            : 'text-lilac-400 hover:text-white'
+                            ? "text-ok hover:text-white"
+                            : "text-lilac-400 hover:text-white"
                       }`}
                     >
                       {isDone && !isCurrent ? (
-                        <Check className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                        <Check
+                          className="h-3.5 w-3.5 shrink-0"
+                          aria-hidden="true"
+                        />
                       ) : null}
                       <span className="truncate">{s.shortLabel}</span>
 
@@ -379,7 +403,11 @@ export function StandsSection() {
                         <motion.span
                           layoutId="stand-wizard-laser-underline"
                           aria-hidden="true"
-                          transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 420,
+                            damping: 30,
+                          }}
                           className="absolute inset-x-0 -bottom-[1px] h-[2px] bg-gradient-to-r from-pink-500 to-cyan-300 shadow-glow-pink-sm"
                         />
                       ) : null}
@@ -394,10 +422,14 @@ export function StandsSection() {
                   {submittedMessage ? (
                     <motion.div
                       key="stand-confirmed-screen"
-                      initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 12 }}
+                      initial={
+                        prefersReduced ? { opacity: 1 } : { opacity: 0, y: 12 }
+                      }
                       animate={{ opacity: 1, y: 0 }}
-                      exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }}
-                      transition={{ duration: 0.24, ease: 'easeOut' }}
+                      exit={
+                        prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }
+                      }
+                      transition={{ duration: 0.24, ease: "easeOut" }}
                       className="space-y-4"
                     >
                       <StampConfirmationBurst
@@ -406,12 +438,16 @@ export function StandsSection() {
                       />
 
                       <p className="text-xs leading-relaxed text-lilac-200">
-                        Tu consulta ya está preparada para enviarse al WhatsApp de reservas{' '}
+                        Tu consulta ya está preparada para enviarse al WhatsApp
+                        de reservas{" "}
                         <strong className="text-cyan-300">
-                          {targetContact?.displayPhone || '(381) 333-2116'}
-                        </strong>{' '}
-                        o al Instagram oficial{' '}
-                        <strong className="text-pink-400">{brand.instagramHandle}</strong>:
+                          {targetContact?.displayPhone || "(381) 333-2116"}
+                        </strong>{" "}
+                        o al Instagram oficial{" "}
+                        <strong className="text-pink-400">
+                          {brand.instagramHandle}
+                        </strong>
+                        :
                       </p>
 
                       <pre
@@ -432,8 +468,14 @@ export function StandsSection() {
                             size="xl"
                             fullWidth
                           >
-                            <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
-                            <span>WhatsApp {targetContact?.displayPhone || '(381) 333-2116'}</span>
+                            <MessageCircle
+                              className="h-4 w-4 shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span>
+                              WhatsApp{" "}
+                              {targetContact?.displayPhone || "(381) 333-2116"}
+                            </span>
                           </NeonButton>
                         ) : null}
                         <AnimatedCopyButton
@@ -441,7 +483,7 @@ export function StandsSection() {
                           onCopy={handleCopySubmitted}
                           idleLabel="Copiar ficha completa"
                           copiedLabel="¡Ficha copiada!"
-                          variant={submittedWaUrl ? 'secondary' : 'primary'}
+                          variant={submittedWaUrl ? "secondary" : "primary"}
                           size="xl"
                           fullWidth
                         />
@@ -456,7 +498,10 @@ export function StandsSection() {
                             fullWidth
                           >
                             <span>Abrir {brand.instagramHandle}</span>
-                            <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            <ExternalLink
+                              className="h-4 w-4 shrink-0"
+                              aria-hidden="true"
+                            />
                           </NeonButton>
                         ) : null}
                       </div>
@@ -464,10 +509,13 @@ export function StandsSection() {
                       <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
                         <button
                           type="button"
-                          onClick={() => setSubmittedMessage('')}
+                          onClick={() => setSubmittedMessage("")}
                           className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-lilac-300 transition hover:text-cyan-300"
                         >
-                          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                          <ArrowLeft
+                            className="h-3.5 w-3.5"
+                            aria-hidden="true"
+                          />
                           <span>Modificar datos de mi ficha</span>
                         </button>
 
@@ -483,9 +531,13 @@ export function StandsSection() {
                   ) : (
                     <motion.form
                       key={`stand-step-${step}`}
-                      initial={prefersReduced ? { opacity: 1 } : { opacity: 0, x: 16 }}
+                      initial={
+                        prefersReduced ? { opacity: 1 } : { opacity: 0, x: 16 }
+                      }
                       animate={{ opacity: 1, x: 0 }}
-                      exit={prefersReduced ? { opacity: 0 } : { opacity: 0, x: -16 }}
+                      exit={
+                        prefersReduced ? { opacity: 0 } : { opacity: 0, x: -16 }
+                      }
                       transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                       onSubmit={handleSubmit}
                       noValidate
@@ -527,9 +579,14 @@ export function StandsSection() {
                             type="button"
                             variant="ghost"
                             size="md"
-                            onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
+                            onClick={() =>
+                              setStep((prev) => Math.max(prev - 1, 1))
+                            }
                           >
-                            <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            <ArrowLeft
+                              className="h-4 w-4 shrink-0"
+                              aria-hidden="true"
+                            />
                             <span>Paso anterior</span>
                           </NeonButton>
                         ) : (
@@ -547,7 +604,10 @@ export function StandsSection() {
                             onClick={goNextStep}
                           >
                             <span>Siguiente paso</span>
-                            <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            <ArrowRight
+                              className="h-4 w-4 shrink-0"
+                              aria-hidden="true"
+                            />
                           </NeonButton>
                         ) : (
                           <NeonButton
@@ -556,9 +616,15 @@ export function StandsSection() {
                             size="xl"
                             data-cursor-label="GENERAR"
                           >
-                            <Store className="h-5 w-5 shrink-0" aria-hidden="true" />
+                            <Store
+                              className="h-5 w-5 shrink-0"
+                              aria-hidden="true"
+                            />
                             <span>Generar solicitud</span>
-                            <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+                            <MessageCircle
+                              className="h-4 w-4 shrink-0"
+                              aria-hidden="true"
+                            />
                           </NeonButton>
                         )}
                       </div>
