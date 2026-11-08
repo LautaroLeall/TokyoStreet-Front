@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
   Check,
   Gamepad2,
@@ -16,21 +16,21 @@ import {
   Trophy,
   User,
   Utensils,
-} from 'lucide-react';
-import { EVENT_CONFIG } from '@/content/event.config';
-import { ValidatedField } from '@/components/ui/ValidatedField';
+} from "lucide-react";
+import { EVENT_CONFIG } from "@/content/event.config";
+import { ValidatedField } from "@/components/ui/ValidatedField";
 import {
   formatArPhoneDisplay,
   sanitizeInstagramInput,
   sanitizePhoneInput,
-} from '@/lib/validators';
+} from "@/lib/validators";
 
 const CATEGORY_ICON_MAP = {
   Gastronomía: Utensils,
   Ilustración: Palette,
   Cosplay: Sparkles,
   Accesorios: Gem,
-  'K-Pop': Music,
+  "K-Pop": Music,
   Ropa: Shirt,
   Juguetes: Gamepad2,
   Coleccionables: Trophy,
@@ -40,11 +40,17 @@ const CATEGORY_ICON_MAP = {
 /**
  * Paso 01: Identidad comercial, responsable, WhatsApp verificado e Instagram.
  */
-export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlurField }) {
+export function StandStepIdentity({
+  form,
+  errors,
+  touched,
+  onFieldChange,
+  onBlurField,
+}) {
   const whatsappCleanHint =
     !errors.whatsapp && form.whatsapp
       ? `Formato detectado: ${formatArPhoneDisplay(form.whatsapp)}`
-      : 'Ej. 381 555 9876 (código de área + número, sin 0 ni 15)';
+      : "Ej. 381 555 9876 (código de área + número, sin 0 ni 15)";
 
   return (
     <div className="space-y-4">
@@ -65,8 +71,8 @@ export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlur
               type="text"
               maxLength={60}
               value={form.brandName}
-              onChange={(e) => onFieldChange('brandName', e.target.value)}
-              onBlur={() => onBlurField('brandName')}
+              onChange={(e) => onFieldChange("brandName", e.target.value)}
+              onBlur={() => onBlurField("brandName")}
               placeholder="Ej. Kitsune Store"
               aria-invalid={invalid}
               aria-describedby={describedBy}
@@ -92,8 +98,8 @@ export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlur
               autoComplete="name"
               maxLength={75}
               value={form.contactName}
-              onChange={(e) => onFieldChange('contactName', e.target.value)}
-              onBlur={() => onBlurField('contactName')}
+              onChange={(e) => onFieldChange("contactName", e.target.value)}
+              onBlur={() => onBlurField("contactName")}
               placeholder="Ej. Sofía Morales"
               aria-invalid={invalid}
               aria-describedby={describedBy}
@@ -121,8 +127,10 @@ export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlur
               inputMode="tel"
               autoComplete="tel"
               value={form.whatsapp}
-              onChange={(e) => onFieldChange('whatsapp', sanitizePhoneInput(e.target.value))}
-              onBlur={() => onBlurField('whatsapp')}
+              onChange={(e) =>
+                onFieldChange("whatsapp", sanitizePhoneInput(e.target.value))
+              }
+              onBlur={() => onBlurField("whatsapp")}
               placeholder="Ej. 381 555 9876"
               aria-invalid={invalid}
               aria-describedby={describedBy}
@@ -136,15 +144,16 @@ export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlur
           label="Instagram comercial"
           required={!form.noInstagram}
           icon={Instagram}
-          error={form.noInstagram ? '' : errors.instagram}
+          error={form.noInstagram ? "" : errors.instagram}
           touched={touched.instagram}
           isValid={
-            form.noInstagram || (Boolean(form.instagram.trim()) && !errors.instagram)
+            form.noInstagram ||
+            (Boolean(form.instagram.trim()) && !errors.instagram)
           }
           hint={
             form.noInstagram
-              ? 'Podrás informarlo más adelante a la organización'
-              : 'Podés pegar tu @usuario o el link de tu perfil'
+              ? "Podrás informarlo más adelante a la organización"
+              : "Podés pegar tu @usuario o el link de tu perfil"
           }
           rightSlot={
             <label className="inline-flex cursor-pointer items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-cyan-300">
@@ -152,8 +161,8 @@ export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlur
                 type="checkbox"
                 checked={form.noInstagram}
                 onChange={(e) => {
-                  onFieldChange('noInstagram', e.target.checked);
-                  if (e.target.checked) onFieldChange('instagram', '');
+                  onFieldChange("noInstagram", e.target.checked);
+                  if (e.target.checked) onFieldChange("instagram", "");
                 }}
                 className="h-3.5 w-3.5 rounded border-cyan-300/40 bg-navy-950 accent-pink-600"
               />
@@ -167,17 +176,24 @@ export function StandStepIdentity({ form, errors, touched, onFieldChange, onBlur
               type="text"
               disabled={form.noInstagram}
               value={form.instagram}
-              onChange={(e) => onFieldChange('instagram', e.target.value)}
+              onChange={(e) => onFieldChange("instagram", e.target.value)}
               onBlur={() => {
                 if (form.instagram.trim()) {
-                  onFieldChange('instagram', sanitizeInstagramInput(form.instagram));
+                  onFieldChange(
+                    "instagram",
+                    sanitizeInstagramInput(form.instagram),
+                  );
                 }
-                onBlurField('instagram');
+                onBlurField("instagram");
               }}
-              placeholder={form.noInstagram ? 'Sin Instagram por ahora' : 'Ej. @kitsune.tuc'}
+              placeholder={
+                form.noInstagram
+                  ? "Sin Instagram por ahora"
+                  : "Ej. @kitsune.tuc"
+              }
               aria-invalid={invalid}
               aria-describedby={describedBy}
-              className={`${inputClassName} ${form.noInstagram ? 'opacity-45 cursor-not-allowed' : ''}`}
+              className={`${inputClassName} ${form.noInstagram ? "opacity-45 cursor-not-allowed" : ""}`}
             />
           )}
         </ValidatedField>
@@ -207,7 +223,10 @@ export function StandStepSpace({
             id="stand-cat-grid-label"
             className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-lilac-200 sm:text-sm sm:normal-case sm:tracking-normal sm:text-white"
           >
-            Rubro principal <span className="text-pink-400" aria-hidden="true">*</span>
+            Rubro principal{" "}
+            <span className="text-pink-400" aria-hidden="true">
+              *
+            </span>
           </span>
           {form.category ? (
             <span className="whitespace-nowrap font-mono text-[11px] font-semibold text-ok">
@@ -231,32 +250,34 @@ export function StandStepSpace({
                 role="radio"
                 aria-checked={selected}
                 onClick={() => {
-                  onFieldChange('category', cat);
+                  onFieldChange("category", cat);
                   if (form.secondaryCategory === cat) {
-                    onFieldChange('secondaryCategory', '');
+                    onFieldChange("secondaryCategory", "");
                   }
                 }}
                 className={`relative flex min-h-[46px] items-center gap-2.5 overflow-hidden rounded-md border px-3 py-2.5 text-left text-xs font-semibold transition sm:text-sm ${
                   selected
-                    ? 'border-pink-400 text-white shadow-glow-pink-sm'
-                    : 'border-cyan-300/20 bg-navy-950/80 text-lilac-200 hover:border-cyan-300/55 hover:text-white'
+                    ? "border-pink-400 text-white shadow-glow-pink-sm"
+                    : "border-cyan-300/20 bg-navy-950/80 text-lilac-200 hover:border-cyan-300/55 hover:text-white"
                 }`}
               >
                 {selected ? (
                   <motion.span
                     layoutId="stand-main-cat-bg"
                     aria-hidden="true"
-                    transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 420, damping: 30 }}
                     className="absolute inset-0 bg-gradient-to-r from-pink-600 to-pink-500"
                   />
                 ) : null}
                 <CatIcon
                   className={`relative z-[1] h-4 w-4 shrink-0 ${
-                    selected ? 'text-white' : 'text-cyan-300'
+                    selected ? "text-white" : "text-cyan-300"
                   }`}
                   aria-hidden="true"
                 />
-                <span className="relative z-[1] truncate whitespace-nowrap">{cat}</span>
+                <span className="relative z-[1] truncate whitespace-nowrap">
+                  {cat}
+                </span>
               </button>
             );
           })}
@@ -285,12 +306,12 @@ export function StandStepSpace({
                     key={sec}
                     type="button"
                     onClick={() =>
-                      onFieldChange('secondaryCategory', active ? '' : sec)
+                      onFieldChange("secondaryCategory", active ? "" : sec)
                     }
                     className={`whitespace-nowrap rounded-pill border px-3 py-1 text-xs font-semibold transition ${
                       active
-                        ? 'border-cyan-300 bg-cyan-400/20 text-cyan-300'
-                        : 'border-white/10 bg-navy-950/75 text-lilac-300 hover:border-cyan-300/40 hover:text-white'
+                        ? "border-cyan-300 bg-cyan-400/20 text-cyan-300"
+                        : "border-white/10 bg-navy-950/75 text-lilac-300 hover:border-cyan-300/40 hover:text-white"
                     }`}
                   >
                     {active ? `✓ ${sec}` : `+ ${sec}`}
@@ -305,7 +326,10 @@ export function StandStepSpace({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <span className="block whitespace-nowrap text-xs font-semibold text-white sm:text-sm">
-            Espacio estimado <span className="text-pink-400" aria-hidden="true">*</span>
+            Espacio estimado{" "}
+            <span className="text-pink-400" aria-hidden="true">
+              *
+            </span>
           </span>
           <div className="mt-2 space-y-2">
             {standsCall.spaceOptions.map((opt) => {
@@ -314,11 +338,11 @@ export function StandStepSpace({
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => onFieldChange('spacePreference', opt.id)}
+                  onClick={() => onFieldChange("spacePreference", opt.id)}
                   className={`flex w-full items-center justify-between gap-2 rounded-md border px-3.5 py-2.5 text-left transition ${
                     selected
-                      ? 'border-cyan-300 bg-cyan-400/15 text-white shadow-glow-cyan-sm'
-                      : 'border-cyan-300/20 bg-navy-950/80 text-lilac-200 hover:border-cyan-300/45'
+                      ? "border-cyan-300 bg-cyan-400/15 text-white shadow-glow-cyan-sm"
+                      : "border-cyan-300/20 bg-navy-950/80 text-lilac-200 hover:border-cyan-300/45"
                   }`}
                 >
                   <span className="truncate whitespace-nowrap text-xs font-semibold sm:text-sm">
@@ -346,11 +370,11 @@ export function StandStepSpace({
                   <button
                     key={exp.id}
                     type="button"
-                    onClick={() => onFieldChange('experience', exp.id)}
+                    onClick={() => onFieldChange("experience", exp.id)}
                     className={`min-h-[40px] truncate whitespace-nowrap rounded-md border px-2.5 py-2 text-xs font-semibold transition ${
                       selected
-                        ? 'border-pink-400 bg-pink-600/25 text-pink-300'
-                        : 'border-white/10 bg-navy-950/80 text-lilac-300 hover:border-cyan-300/40 hover:text-white'
+                        ? "border-pink-400 bg-pink-600/25 text-pink-300"
+                        : "border-white/10 bg-navy-950/80 text-lilac-300 hover:border-cyan-300/40 hover:text-white"
                     }`}
                   >
                     {exp.label}
@@ -374,14 +398,18 @@ export function StandStepSpace({
                     onClick={() => onToggleExtra(extra.id)}
                     className={`flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-xs font-semibold transition ${
                       active
-                        ? 'border-ok/60 bg-ok/15 text-white'
-                        : 'border-white/10 bg-navy-950/75 text-lilac-300 hover:border-cyan-300/35 hover:text-white'
+                        ? "border-ok/60 bg-ok/15 text-white"
+                        : "border-white/10 bg-navy-950/75 text-lilac-300 hover:border-cyan-300/35 hover:text-white"
                     }`}
                   >
-                    <span className="truncate whitespace-nowrap">{extra.label}</span>
+                    <span className="truncate whitespace-nowrap">
+                      {extra.label}
+                    </span>
                     <span
                       className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
-                        active ? 'border-ok bg-ok text-navy-950' : 'border-white/25'
+                        active
+                          ? "border-ok bg-ok text-navy-950"
+                          : "border-white/25"
                       }`}
                     >
                       {active ? <Check className="h-3 w-3 stroke-[3]" /> : null}
@@ -412,12 +440,12 @@ export function StandStepProposal({
   const suggestions = standsCall.categorySuggestions?.[form.category] || [];
   const charLen = form.description.trim().length;
 
-  let qualityBadge = { text: 'Mínimo 20 caracteres', tone: 'text-lilac-400' };
+  let qualityBadge = { text: "Mínimo 20 caracteres", tone: "text-lilac-400" };
   if (charLen >= 20 && !errors.description) {
     qualityBadge =
       charLen >= 65
-        ? { text: '★ Propuesta súper completa', tone: 'text-ok' }
-        : { text: '✓ Descripción válida', tone: 'text-cyan-300' };
+        ? { text: "★ Propuesta súper completa", tone: "text-ok" }
+        : { text: "✓ Descripción válida", tone: "text-cyan-300" };
   }
 
   return (
@@ -426,8 +454,9 @@ export function StandStepProposal({
       {suggestions.length > 0 ? (
         <div>
           <span className="block text-xs font-semibold text-lilac-300">
-            Ideas rápidas para <strong className="text-cyan-300">{form.category}</strong> (tocá para
-            sumar):
+            Ideas rápidas para{" "}
+            <strong className="text-cyan-300">{form.category}</strong> (tocá
+            para sumar):
           </span>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {suggestions.map((sug) => (
@@ -437,7 +466,10 @@ export function StandStepProposal({
                 onClick={() => onAppendSuggestion(sug.trim())}
                 className="inline-flex items-center gap-1 whitespace-nowrap rounded-pill border border-cyan-300/30 bg-navy-950/90 px-3 py-1 text-xs font-semibold text-cyan-300 transition hover:border-pink-400 hover:bg-pink-600/20 hover:text-white"
               >
-                <Plus className="h-3 w-3 shrink-0 text-pink-400" aria-hidden="true" />
+                <Plus
+                  className="h-3 w-3 shrink-0 text-pink-400"
+                  aria-hidden="true"
+                />
                 <span>{sug.trim()}</span>
               </button>
             ))}
@@ -455,7 +487,9 @@ export function StandStepProposal({
         isValid={charLen >= 20 && !errors.description}
         counter={`${form.description.length}/240`}
         rightSlot={
-          <span className={`whitespace-nowrap text-[11px] font-semibold ${qualityBadge.tone}`}>
+          <span
+            className={`whitespace-nowrap text-[11px] font-semibold ${qualityBadge.tone}`}
+          >
             {qualityBadge.text}
           </span>
         }
@@ -467,8 +501,8 @@ export function StandStepProposal({
             rows={4}
             maxLength={240}
             value={form.description}
-            onChange={(e) => onFieldChange('description', e.target.value)}
-            onBlur={() => onBlurField('description')}
+            onChange={(e) => onFieldChange("description", e.target.value)}
+            onBlur={() => onBlurField("description")}
             placeholder="Ej. Prints A4/A3 de ilustración propia, stickers holográficos laminados, pines y llaveros acrílicos de anime."
             aria-invalid={invalid}
             aria-describedby={describedBy}
@@ -481,17 +515,17 @@ export function StandStepProposal({
       <div
         className={`rounded-md border p-3.5 transition-colors ${
           touched.acceptedTerms && errors.acceptedTerms
-            ? 'border-bad/80 bg-bad/[0.06]'
+            ? "border-bad/80 bg-bad/[0.06]"
             : form.acceptedTerms
-              ? 'border-ok/50 bg-ok/[0.06]'
-              : 'border-cyan-300/20 bg-navy-950/80'
+              ? "border-ok/50 bg-ok/[0.06]"
+              : "border-cyan-300/20 bg-navy-950/80"
         }`}
       >
         <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-lilac-200">
           <input
             type="checkbox"
             checked={form.acceptedTerms}
-            onChange={(e) => onFieldChange('acceptedTerms', e.target.checked)}
+            onChange={(e) => onFieldChange("acceptedTerms", e.target.checked)}
             className="mt-0.5 h-4 w-4 shrink-0 rounded border-cyan-300/45 bg-navy-950 accent-pink-600"
           />
           <span>{standsCall.disclaimer}</span>

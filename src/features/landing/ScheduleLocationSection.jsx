@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Bus, CalendarClock, Clock, ExternalLink, MapPin } from 'lucide-react';
-import { EVENT_CONFIG } from '@/content/event.config';
-import { NeonButton } from '@/components/ui/NeonButton';
-import { RevealBlock } from '@/components/ui/RevealMotion';
-import { ScrollPushSection } from '@/components/ui/ScrollStage3D';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Bus, CalendarClock, Clock, ExternalLink, MapPin } from "lucide-react";
+import { EVENT_CONFIG } from "@/content/event.config";
+import { NeonButton } from "@/components/ui/NeonButton";
+import { RevealBlock } from "@/components/ui/RevealMotion";
+import { ScrollPushSection } from "@/components/ui/ScrollStage3D";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const TABS = [
-  { id: 'ubicacion', label: '01 · Cómo llegar' },
-  { id: 'cronograma', label: '02 · Cronograma' },
+  { id: "ubicacion", label: "01 · Cómo llegar" },
+  { id: "cronograma", label: "02 · Cronograma" },
 ];
 
 /**
@@ -20,11 +20,13 @@ const TABS = [
 export function ScheduleLocationSection() {
   const { schedule, event } = EVENT_CONFIG;
   const prefersReduced = useReducedMotion();
-  const [activeTab, setActiveTab] = useState('ubicacion');
+  const [activeTab, setActiveTab] = useState("ubicacion");
   const [mapInteractive, setMapInteractive] = useState(false);
 
-  const hasSchedule = Array.isArray(schedule.blocks) && schedule.blocks.length > 0;
-  const hasBusLines = Array.isArray(event.venue.busLines) && event.venue.busLines.length > 0;
+  const hasSchedule =
+    Array.isArray(schedule.blocks) && schedule.blocks.length > 0;
+  const hasBusLines =
+    Array.isArray(event.venue.busLines) && event.venue.busLines.length > 0;
 
   return (
     <ScrollPushSection id="ubicacion" accent="pink" className="py-16 sm:py-24">
@@ -57,7 +59,9 @@ export function ScheduleLocationSection() {
                     aria-controls={`panel-${tab.id}`}
                     onClick={() => setActiveTab(tab.id)}
                     className={`relative min-h-[42px] whitespace-nowrap pb-2.5 font-mono text-xs font-bold uppercase tracking-widest transition-colors sm:text-sm ${
-                      selected ? 'text-white' : 'text-lilac-400 hover:text-cyan-300'
+                      selected
+                        ? "text-white"
+                        : "text-lilac-400 hover:text-cyan-300"
                     }`}
                   >
                     <span>{tab.label}</span>
@@ -65,7 +69,11 @@ export function ScheduleLocationSection() {
                       <motion.span
                         layoutId="schedule-tab-laser-line"
                         aria-hidden="true"
-                        transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 420,
+                          damping: 30,
+                        }}
                         className="absolute inset-x-0 -bottom-[1px] h-[2px] bg-gradient-to-r from-pink-500 to-cyan-300 shadow-glow-pink-sm"
                       />
                     ) : null}
@@ -78,13 +86,15 @@ export function ScheduleLocationSection() {
 
         <div className="mt-10">
           <AnimatePresence mode="wait" initial={false}>
-            {activeTab === 'ubicacion' ? (
+            {activeTab === "ubicacion" ? (
               <motion.div
                 key="panel-ubicacion"
                 id="panel-ubicacion"
                 role="tabpanel"
                 aria-labelledby="tab-ubicacion"
-                initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
+                initial={
+                  prefersReduced ? { opacity: 1 } : { opacity: 0, y: 16 }
+                }
                 animate={{ opacity: 1, y: 0 }}
                 exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
@@ -107,7 +117,10 @@ export function ScheduleLocationSection() {
                     <div className="divide-y divide-white/10 border-y border-white/10 text-sm text-lilac-200">
                       <div className="flex items-center justify-between gap-3 py-3">
                         <span className="inline-flex items-center gap-2 whitespace-nowrap font-mono text-xs uppercase tracking-wider text-lilac-400">
-                          <Clock className="h-3.5 w-3.5 text-pink-400" aria-hidden="true" />
+                          <Clock
+                            className="h-3.5 w-3.5 text-pink-400"
+                            aria-hidden="true"
+                          />
                           <span>Jornada</span>
                         </span>
                         <span className="whitespace-nowrap font-semibold text-white">
@@ -119,7 +132,10 @@ export function ScheduleLocationSection() {
                     {hasBusLines ? (
                       <div className="space-y-2">
                         <p className="flex items-center gap-2 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-wider text-cyan-300">
-                          <Bus className="h-4 w-4 shrink-0" aria-hidden="true" />
+                          <Bus
+                            className="h-4 w-4 shrink-0"
+                            aria-hidden="true"
+                          />
                           <span>Colectivos cercanos</span>
                         </p>
                         <div className="flex flex-wrap gap-2">
@@ -145,9 +161,15 @@ export function ScheduleLocationSection() {
                         variant="primary"
                         size="xl"
                       >
-                        <MapPin className="h-5 w-5 shrink-0" aria-hidden="true" />
+                        <MapPin
+                          className="h-5 w-5 shrink-0"
+                          aria-hidden="true"
+                        />
                         <span>Abrir en Google Maps</span>
-                        <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                        <ExternalLink
+                          className="h-4 w-4 shrink-0"
+                          aria-hidden="true"
+                        />
                       </NeonButton>
                     </div>
                   </div>
@@ -187,22 +209,28 @@ export function ScheduleLocationSection() {
                               <>
                                 <motion.span
                                   aria-hidden="true"
-                                  animate={{ scale: [1, 2.3], opacity: [0.55, 0] }}
+                                  animate={{
+                                    scale: [1, 2.3],
+                                    opacity: [0.55, 0],
+                                  }}
                                   transition={{
                                     duration: 2.2,
                                     repeat: Infinity,
-                                    ease: 'easeOut',
+                                    ease: "easeOut",
                                   }}
                                   className="pointer-events-none absolute h-14 w-14 rounded-full border border-cyan-300"
                                 />
                                 <motion.span
                                   aria-hidden="true"
-                                  animate={{ scale: [1, 1.8], opacity: [0.45, 0] }}
+                                  animate={{
+                                    scale: [1, 1.8],
+                                    opacity: [0.45, 0],
+                                  }}
                                   transition={{
                                     duration: 2.2,
                                     delay: 0.7,
                                     repeat: Infinity,
-                                    ease: 'easeOut',
+                                    ease: "easeOut",
                                   }}
                                   className="pointer-events-none absolute h-14 w-14 rounded-full border border-pink-400"
                                 />
@@ -217,7 +245,9 @@ export function ScheduleLocationSection() {
                           <p className="mt-4 whitespace-nowrap font-display text-lg uppercase tracking-wide text-white">
                             {event.venue.name}
                           </p>
-                          <p className="mt-1 text-sm text-lilac-300">{event.venue.fullAddress}</p>
+                          <p className="mt-1 text-sm text-lilac-300">
+                            {event.venue.fullAddress}
+                          </p>
                           <div className="mt-5 flex flex-wrap justify-center gap-3">
                             <NeonButton
                               variant="secondary"
@@ -236,7 +266,10 @@ export function ScheduleLocationSection() {
                               size="md"
                             >
                               <span>Ir a Google Maps</span>
-                              <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                              <ExternalLink
+                                className="h-4 w-4 shrink-0"
+                                aria-hidden="true"
+                              />
                             </NeonButton>
                           </div>
                         </div>
@@ -251,7 +284,9 @@ export function ScheduleLocationSection() {
                 id="panel-cronograma"
                 role="tabpanel"
                 aria-labelledby="tab-cronograma"
-                initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
+                initial={
+                  prefersReduced ? { opacity: 1 } : { opacity: 0, y: 16 }
+                }
                 animate={{ opacity: 1, y: 0 }}
                 exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
@@ -272,7 +307,9 @@ export function ScheduleLocationSection() {
                               {slot.title}
                             </h3>
                             {slot.stageNote ? (
-                              <p className="text-xs text-lilac-300">{slot.stageNote}</p>
+                              <p className="text-xs text-lilac-300">
+                                {slot.stageNote}
+                              </p>
                             ) : null}
                           </div>
                         </div>

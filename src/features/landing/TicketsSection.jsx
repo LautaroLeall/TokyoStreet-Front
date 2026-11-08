@@ -6,13 +6,13 @@ import {
   MapPin,
   Smartphone,
   Store,
-} from 'lucide-react';
-import { EVENT_CONFIG } from '@/content/event.config';
-import { NeonButton } from '@/components/ui/NeonButton';
-import { RevealBlock } from '@/components/ui/RevealMotion';
-import { ScrollPushSection } from '@/components/ui/ScrollStage3D';
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { Tilt3DCard } from '@/components/ui/Tilt3DCard';
+} from "lucide-react";
+import { EVENT_CONFIG } from "@/content/event.config";
+import { NeonButton } from "@/components/ui/NeonButton";
+import { RevealBlock } from "@/components/ui/RevealMotion";
+import { ScrollPushSection } from "@/components/ui/ScrollStage3D";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Tilt3DCard } from "@/components/ui/Tilt3DCard";
 
 /**
  * Sección Entradas — 1 único Ticket Físico/Holográfico protagonista + columnas abiertas sin cajitas:
@@ -25,7 +25,12 @@ export function TicketsSection() {
   return (
     <ScrollPushSection id="entradas" accent="pink" className="py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SectionHeading index="02" eyebrow={tickets.eyebrow} title={tickets.title} showKanji />
+        <SectionHeading
+          index="02"
+          eyebrow={tickets.eyebrow}
+          title={tickets.title}
+          showKanji
+        />
 
         {/* ÚNICO OBJETO FÍSICO: Boleto Perforado 3D de Admisión General */}
         <RevealBlock delay={0.05} className="mt-9">
@@ -55,7 +60,8 @@ export function TicketsSection() {
                       {brand.name} · {event.shortDateLabel}
                     </p>
                     <p className="mt-1 text-sm text-lilac-200">
-                      {event.venue.name} ({event.venue.address}) · {event.hoursLabel}
+                      {event.venue.name} ({event.venue.address}) ·{" "}
+                      {event.hoursLabel}
                     </p>
                   </div>
                 </div>
@@ -90,7 +96,10 @@ export function TicketsSection() {
         {/* Dos canales abiertos divididos por línea arquitectónica (SIN CARDS) */}
         <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-0 md:divide-x md:divide-cyan-300/20">
           {/* Canal 01: Entrada Virtual */}
-          <RevealBlock delay={0.08} className="flex flex-col justify-between md:pr-10">
+          <RevealBlock
+            delay={0.08}
+            className="flex flex-col justify-between md:pr-10"
+          >
             <div>
               <div className="flex items-center gap-2.5 whitespace-nowrap font-mono text-xs font-bold uppercase tracking-[0.14em] text-pink-400">
                 <Smartphone className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -106,7 +115,9 @@ export function TicketsSection() {
               </p>
 
               <p className="mt-4 border-l-2 border-cyan-300/60 pl-3.5 text-xs leading-relaxed text-lilac-300">
-                <strong className="font-semibold text-cyan-300">Validación en puerta: </strong>
+                <strong className="font-semibold text-cyan-300">
+                  Validación en puerta:{" "}
+                </strong>
                 {tickets.online.doorProcedure}
               </p>
             </div>
@@ -123,21 +134,29 @@ export function TicketsSection() {
                   size="xl"
                 >
                   <span>{tickets.online.ctaEnabled}</span>
-                  <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <ExternalLink
+                    className="h-4 w-4 shrink-0"
+                    aria-hidden="true"
+                  />
                 </NeonButton>
               ) : (
                 <div>
                   <NeonButton variant="primary" size="xl" disabled>
                     <span>{tickets.online.ctaDisabled}</span>
                   </NeonButton>
-                  <p className="mt-2 text-xs text-lilac-300">{tickets.online.disabledHint}</p>
+                  <p className="mt-2 text-xs text-lilac-300">
+                    {tickets.online.disabledHint}
+                  </p>
                 </div>
               )}
             </div>
           </RevealBlock>
 
           {/* Canal 02: Punto Físico Oficial */}
-          <RevealBlock delay={0.14} className="flex flex-col justify-between md:pl-10">
+          <RevealBlock
+            delay={0.14}
+            className="flex flex-col justify-between md:pl-10"
+          >
             <div>
               <div className="flex items-center gap-2.5 whitespace-nowrap font-mono text-xs font-bold uppercase tracking-[0.14em] text-cyan-300">
                 <Store className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -154,12 +173,18 @@ export function TicketsSection() {
 
               <div className="mt-3 space-y-2 text-sm text-lilac-200">
                 <p className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 shrink-0 text-pink-400" aria-hidden="true" />
+                  <MapPin
+                    className="h-4 w-4 shrink-0 text-pink-400"
+                    aria-hidden="true"
+                  />
                   <span>{tickets.physical.address}</span>
                 </p>
                 {tickets.physical.hours ? (
                   <p className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 shrink-0 text-cyan-300" aria-hidden="true" />
+                    <Clock
+                      className="h-4 w-4 shrink-0 text-cyan-300"
+                      aria-hidden="true"
+                    />
                     <span>{tickets.physical.hours}</span>
                   </p>
                 ) : null}
@@ -178,7 +203,10 @@ export function TicketsSection() {
               >
                 <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
                 <span>{tickets.physical.ctaMap}</span>
-                <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <ExternalLink
+                  className="h-3.5 w-3.5 shrink-0"
+                  aria-hidden="true"
+                />
               </NeonButton>
             </div>
           </RevealBlock>
@@ -190,11 +218,17 @@ export function TicketsSection() {
           className="mt-10 grid grid-cols-1 gap-4 border-t border-white/10 pt-6 md:grid-cols-2 md:gap-10"
         >
           <div className="flex items-start gap-3 border-l-2 border-ok pl-3.5 text-xs leading-relaxed text-lilac-200 sm:text-sm">
-            <HeartHandshake className="mt-0.5 h-4 w-4 shrink-0 text-ok" aria-hidden="true" />
+            <HeartHandshake
+              className="mt-0.5 h-4 w-4 shrink-0 text-ok"
+              aria-hidden="true"
+            />
             <p>{tickets.kidsNotice}</p>
           </div>
           <div className="flex items-start gap-3 border-l-2 border-white/20 pl-3.5 text-xs leading-relaxed text-lilac-300">
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" aria-hidden="true" />
+            <Info
+              className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300"
+              aria-hidden="true"
+            />
             <p>{tickets.scopeDisclaimer}</p>
           </div>
         </RevealBlock>

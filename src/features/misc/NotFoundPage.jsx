@@ -36,8 +36,16 @@ export default function NotFoundPage() {
   const pointerX = useMotionValue(0.5);
   const pointerY = useMotionValue(0.5);
 
-  const smoothX = useSpring(pointerX, { stiffness: 170, damping: 22, mass: 0.5 });
-  const smoothY = useSpring(pointerY, { stiffness: 170, damping: 22, mass: 0.5 });
+  const smoothX = useSpring(pointerX, {
+    stiffness: 170,
+    damping: 22,
+    mass: 0.5,
+  });
+  const smoothY = useSpring(pointerY, {
+    stiffness: 170,
+    damping: 22,
+    mass: 0.5,
+  });
 
   const rotateX = useTransform(smoothY, [0, 1], [13, -13]);
   const rotateY = useTransform(smoothX, [0, 1], [-16, 16]);
@@ -48,11 +56,16 @@ export default function NotFoundPage() {
   const portalGlow = useMotionTemplate`radial-gradient(360px circle at ${glareX} ${glareY}, rgba(240, 0, 120, 0.28), rgba(132, 240, 252, 0.16) 45%, transparent 75%)`;
 
   const handlePointerMove = (e) => {
-    if (prefersReduced || e.pointerType === "touch" || !stageRef.current) return;
+    if (prefersReduced || e.pointerType === "touch" || !stageRef.current)
+      return;
     const rect = stageRef.current.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    pointerX.set(Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1));
-    pointerY.set(Math.min(Math.max((e.clientY - rect.top) / rect.height, 0), 1));
+    pointerX.set(
+      Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1),
+    );
+    pointerY.set(
+      Math.min(Math.max((e.clientY - rect.top) / rect.height, 0), 1),
+    );
   };
 
   const handlePointerLeave = () => {
@@ -206,9 +219,7 @@ export default function NotFoundPage() {
               }
             }}
             aria-label="Monumento 3D 404. Presioná para girar el portal y recalibrar la señal."
-            animate={
-              prefersReduced ? undefined : { rotateY: pulseCount * 360 }
-            }
+            animate={prefersReduced ? undefined : { rotateY: pulseCount * 360 }}
             transition={{ type: "spring", stiffness: 150, damping: 20 }}
             className="preserve-3d group relative flex cursor-pointer items-center justify-center py-4 outline-none"
           >
@@ -294,7 +305,10 @@ export default function NotFoundPage() {
             className="pointer-events-none absolute bottom-1 sm:bottom-2"
           >
             <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded border border-cyan-300/30 bg-navy-950/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan-300 backdrop-blur-md">
-              <Sparkles className="h-3 w-3 shrink-0 text-pink-400" aria-hidden="true" />
+              <Sparkles
+                className="h-3 w-3 shrink-0 text-pink-400"
+                aria-hidden="true"
+              />
               <span>TOCAR 404 PARA GIRAR EL PORTAL 3D</span>
             </span>
           </div>

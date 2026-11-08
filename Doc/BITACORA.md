@@ -30,6 +30,7 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
   - Ruteo con `React.lazy` para `/pasaporte`, `/s/:token`, `/stand` y `/org`.
 
 ### Pendientes de la organización para completar configuración en `event.config.js`
+
 - `A2`: URL del canal online de venta de entradas (`tickets.online.purchaseUrl`).
 - `A3`: Horarios de atención de Akarumi Yume Manga Café (`tickets.physical.hours`).
 - `A4`: Líneas de colectivo verificadas (`event.venue.busLines`).

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Award,
   Instagram,
@@ -8,13 +8,13 @@ import {
   Sparkles,
   Trophy,
   UserCheck,
-} from 'lucide-react';
-import { EVENT_CONFIG } from '@/content/event.config';
-import { NeonButton } from '@/components/ui/NeonButton';
-import { StaggerGrid, StaggerItem } from '@/components/ui/RevealMotion';
-import { ScrollPushSection } from '@/components/ui/ScrollStage3D';
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ContestInscriptionModal } from './ContestInscriptionModal';
+} from "lucide-react";
+import { EVENT_CONFIG } from "@/content/event.config";
+import { NeonButton } from "@/components/ui/NeonButton";
+import { StaggerGrid, StaggerItem } from "@/components/ui/RevealMotion";
+import { ScrollPushSection } from "@/components/ui/ScrollStage3D";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ContestInscriptionModal } from "./ContestInscriptionModal";
 
 const CONTEST_ICONS = {
   mic: Mic,
@@ -46,7 +46,7 @@ export function ContestsSection() {
         <StaggerGrid className="mt-10 divide-y divide-cyan-300/20 border-y border-cyan-300/20">
           {contests.items.map((contest, index) => {
             const IconComponent = CONTEST_ICONS[contest.icon] || Trophy;
-            const stageNum = String(index + 1).padStart(2, '0');
+            const stageNum = String(index + 1).padStart(2, "0");
             const avatars = contest.jurorAvatars || [];
 
             return (
@@ -68,7 +68,10 @@ export function ContestsSection() {
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 whitespace-nowrap font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
-                        <IconComponent className="h-3.5 w-3.5 shrink-0 text-pink-400" aria-hidden="true" />
+                        <IconComponent
+                          className="h-3.5 w-3.5 shrink-0 text-pink-400"
+                          aria-hidden="true"
+                        />
                         <span>{contest.badge}</span>
                       </div>
 
@@ -94,11 +97,17 @@ export function ContestsSection() {
                             ))}
                           </div>
                         ) : (
-                          <UserCheck className="h-3.5 w-3.5 shrink-0 text-pink-400" aria-hidden="true" />
+                          <UserCheck
+                            className="h-3.5 w-3.5 shrink-0 text-pink-400"
+                            aria-hidden="true"
+                          />
                         )}
 
                         <span className="whitespace-nowrap">
-                          Jurado: <strong className="text-white">{contest.jurorDisplay}</strong>
+                          Jurado:{" "}
+                          <strong className="text-white">
+                            {contest.jurorDisplay}
+                          </strong>
                         </span>
 
                         {contest.jurorInstagram ? (
@@ -109,7 +118,10 @@ export function ContestsSection() {
                             data-cursor-label="INSTAGRAM"
                             className="inline-flex items-center gap-1 whitespace-nowrap font-mono text-[11px] text-pink-400 transition hover:text-cyan-300"
                           >
-                            <Instagram className="h-3 w-3 shrink-0" aria-hidden="true" />
+                            <Instagram
+                              className="h-3 w-3 shrink-0"
+                              aria-hidden="true"
+                            />
                             <span>{contest.jurorInstagram.handle}</span>
                           </a>
                         ) : null}
@@ -121,16 +133,22 @@ export function ContestsSection() {
                   <div className="space-y-3 lg:col-span-5">
                     <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
                       {contest.prizes.map((prize, pIdx) => (
-                        <div key={prize.place} className="flex items-baseline gap-2 whitespace-nowrap">
+                        <div
+                          key={prize.place}
+                          className="flex items-baseline gap-2 whitespace-nowrap"
+                        >
                           <span className="inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase tracking-wider text-warn">
-                            <Trophy className="h-3 w-3 shrink-0" aria-hidden="true" />
+                            <Trophy
+                              className="h-3 w-3 shrink-0"
+                              aria-hidden="true"
+                            />
                             <span>{prize.place}:</span>
                           </span>
                           <span
                             className={`font-display tracking-wide ${
                               pIdx === 0
-                                ? 'text-glow-cyan text-lg text-cyan-300 sm:text-xl'
-                                : 'text-sm text-white sm:text-base'
+                                ? "text-glow-cyan text-lg text-cyan-300 sm:text-xl"
+                                : "text-sm text-white sm:text-base"
                             }`}
                           >
                             {prize.reward}
@@ -142,7 +160,10 @@ export function ContestsSection() {
                     <ul className="space-y-1 text-xs leading-relaxed text-lilac-300 sm:text-sm">
                       {contest.requirements.map((req) => (
                         <li key={req} className="flex items-start gap-2">
-                          <span aria-hidden="true" className="font-mono text-pink-400">
+                          <span
+                            aria-hidden="true"
+                            className="font-mono text-pink-400"
+                          >
                             —
                           </span>
                           <span>{req}</span>
@@ -160,7 +181,10 @@ export function ContestsSection() {
                       data-cursor-label="INSCRIBIR"
                       onClick={() => setSelectedContest(contest)}
                     >
-                      <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <MessageCircle
+                        className="h-4 w-4 shrink-0"
+                        aria-hidden="true"
+                      />
                       <span>Inscribirme</span>
                     </NeonButton>
                   </div>

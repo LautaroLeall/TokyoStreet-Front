@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -7,20 +7,20 @@ import {
   useReducedMotion,
   useSpring,
   useTransform,
-} from 'framer-motion';
+} from "framer-motion";
 import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
   Expand,
   Instagram,
-} from 'lucide-react';
-import { EVENT_CONFIG } from '@/content/event.config';
-import { BottomSheetModal } from '@/components/ui/BottomSheetModal';
-import { RevealBlock } from '@/components/ui/RevealMotion';
-import { ScrollPushSection } from '@/components/ui/ScrollStage3D';
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { scrollToSectionSmooth } from '@/lib/scrollToHero';
+} from "lucide-react";
+import { EVENT_CONFIG } from "@/content/event.config";
+import { BottomSheetModal } from "@/components/ui/BottomSheetModal";
+import { RevealBlock } from "@/components/ui/RevealMotion";
+import { ScrollPushSection } from "@/components/ui/ScrollStage3D";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { scrollToSectionSmooth } from "@/lib/scrollToHero";
 
 /**
  * Sección 03 — Invitados Especiales y Jurados (CERO GRILLA DE CARDS):
@@ -33,16 +33,16 @@ export function LineupSection() {
   const { lineup } = EVENT_CONFIG;
   const prefersReduced = useReducedMotion();
 
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [selectedId, setSelectedId] = useState(lineup.members[0]?.id || '');
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedId, setSelectedId] = useState(lineup.members[0]?.id || "");
   const [flyerModalOpen, setFlyerModalOpen] = useState(false);
 
   const filteredMembers = useMemo(
     () =>
-      activeFilter === 'all'
+      activeFilter === "all"
         ? lineup.members
         : lineup.members.filter((m) => m.group === activeFilter),
-    [activeFilter, lineup.members]
+    [activeFilter, lineup.members],
   );
 
   const activeIndex = useMemo(() => {
@@ -55,7 +55,7 @@ export function LineupSection() {
   const handleFilterChange = (filterId) => {
     setActiveFilter(filterId);
     const nextList =
-      filterId === 'all'
+      filterId === "all"
         ? lineup.members
         : lineup.members.filter((m) => m.group === filterId);
     if (nextList[0]) {
@@ -70,17 +70,17 @@ export function LineupSection() {
         (activeIndex + delta + filteredMembers.length) % filteredMembers.length;
       setSelectedId(filteredMembers[nextIdx].id);
     },
-    [activeIndex, filteredMembers]
+    [activeIndex, filteredMembers],
   );
 
   useEffect(() => {
     if (!flyerModalOpen) return undefined;
     const onKey = (e) => {
-      if (e.key === 'ArrowLeft') stepMember(-1);
-      if (e.key === 'ArrowRight') stepMember(1);
+      if (e.key === "ArrowLeft") stepMember(-1);
+      if (e.key === "ArrowRight") stepMember(1);
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [flyerModalOpen, stepMember]);
 
   // Inclinación 3D reactiva al puntero para el retrato protagonista
@@ -91,12 +91,13 @@ export function LineupSection() {
   const smoothY = useSpring(py, { stiffness: 220, damping: 24 });
   const rotateX = useTransform(smoothY, [0, 1], [7, -7]);
   const rotateY = useTransform(smoothX, [0, 1], [-8, 8]);
-  const glareX = useTransform(smoothX, [0, 1], ['10%', '90%']);
-  const glareY = useTransform(smoothY, [0, 1], ['10%', '90%']);
+  const glareX = useTransform(smoothX, [0, 1], ["10%", "90%"]);
+  const glareY = useTransform(smoothY, [0, 1], ["10%", "90%"]);
   const holoSheen = useMotionTemplate`radial-gradient(280px circle at ${glareX} ${glareY}, rgba(240, 0, 120, 0.24), rgba(132, 240, 252, 0.1) 50%, transparent 80%)`;
 
   const handlePointerMove = (e) => {
-    if (prefersReduced || e.pointerType === 'touch' || !portraitRef.current) return;
+    if (prefersReduced || e.pointerType === "touch" || !portraitRef.current)
+      return;
     const rect = portraitRef.current.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
     px.set(Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1));
@@ -132,9 +133,10 @@ export function LineupSection() {
               {lineup.filters.map((filter) => {
                 const selected = activeFilter === filter.id;
                 const count =
-                  filter.id === 'all'
+                  filter.id === "all"
                     ? lineup.members.length
-                    : lineup.members.filter((m) => m.group === filter.id).length;
+                    : lineup.members.filter((m) => m.group === filter.id)
+                        .length;
 
                 return (
                   <button
@@ -144,20 +146,26 @@ export function LineupSection() {
                     aria-selected={selected}
                     onClick={() => handleFilterChange(filter.id)}
                     className={`relative shrink-0 whitespace-nowrap pb-2.5 font-mono text-xs font-bold uppercase tracking-wider transition-colors ${
-                      selected ? 'text-white' : 'text-lilac-400 hover:text-cyan-300'
+                      selected
+                        ? "text-white"
+                        : "text-lilac-400 hover:text-cyan-300"
                     }`}
                   >
                     <span>
-                      {filter.label}{' '}
+                      {filter.label}{" "}
                       <span className="text-[10px] text-cyan-300/75">
-                        ({String(count).padStart(2, '0')})
+                        ({String(count).padStart(2, "0")})
                       </span>
                     </span>
                     {selected ? (
                       <motion.span
                         layoutId="lineup-filter-laser"
                         aria-hidden="true"
-                        transition={{ type: 'spring', stiffness: 420, damping: 30 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 420,
+                          damping: 30,
+                        }}
                         className="absolute inset-x-0 -bottom-[1px] h-[2px] bg-gradient-to-r from-pink-500 to-cyan-300 shadow-glow-pink-sm"
                       />
                     ) : null}
@@ -215,9 +223,17 @@ export function LineupSection() {
                       initial={
                         prefersReduced
                           ? { opacity: 1 }
-                          : { opacity: 0, scale: 1.06, filter: 'brightness(1.25)' }
+                          : {
+                              opacity: 0,
+                              scale: 1.06,
+                              filter: "brightness(1.25)",
+                            }
                       }
-                      animate={{ opacity: 1, scale: 1, filter: 'brightness(1)' }}
+                      animate={{
+                        opacity: 1,
+                        scale: 1,
+                        filter: "brightness(1)",
+                      }}
                       exit={
                         prefersReduced
                           ? { opacity: 0 }
@@ -243,7 +259,10 @@ export function LineupSection() {
                   ) : null}
 
                   <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill border border-cyan-300/40 bg-navy-950/90 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-300 backdrop-blur-md transition group-hover:border-pink-400 group-hover:text-white">
-                    <Expand className="h-3 w-3 text-pink-400" aria-hidden="true" />
+                    <Expand
+                      className="h-3 w-3 text-pink-400"
+                      aria-hidden="true"
+                    />
                     <span>Flyer oficial</span>
                   </span>
                 </button>
@@ -257,9 +276,13 @@ export function LineupSection() {
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeMember.id}
-                  initial={prefersReduced ? { opacity: 1 } : { opacity: 0, x: 18 }}
+                  initial={
+                    prefersReduced ? { opacity: 1 } : { opacity: 0, x: 18 }
+                  }
                   animate={{ opacity: 1, x: 0 }}
-                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, x: -14 }}
+                  exit={
+                    prefersReduced ? { opacity: 0 } : { opacity: 0, x: -14 }
+                  }
                   transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -294,13 +317,16 @@ export function LineupSection() {
                         href="#concursos"
                         onClick={(e) => {
                           e.preventDefault();
-                          scrollToSectionSmooth('#concursos');
+                          scrollToSectionSmooth("#concursos");
                         }}
                         data-cursor-label="CONCURSOS"
                         className="inline-flex items-center gap-1.5 whitespace-nowrap text-cyan-300 transition hover:text-pink-400"
                       >
                         <span>Ver concurso e inscripción</span>
-                        <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                        <ArrowRight
+                          className="h-3.5 w-3.5 shrink-0"
+                          aria-hidden="true"
+                        />
                       </a>
                     ) : null}
 
@@ -312,7 +338,10 @@ export function LineupSection() {
                         data-cursor-label="INSTAGRAM"
                         className="inline-flex items-center gap-1.5 whitespace-nowrap text-pink-400 transition hover:text-white"
                       >
-                        <Instagram className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                        <Instagram
+                          className="h-3.5 w-3.5 shrink-0"
+                          aria-hidden="true"
+                        />
                         <span>{activeMember.instagramHandle}</span>
                       </a>
                     ) : null}
@@ -325,8 +354,9 @@ export function LineupSection() {
             <div className="mt-7 border-t border-cyan-300/20 pt-5">
               <div className="mb-3 flex items-center justify-between gap-2">
                 <span className="whitespace-nowrap font-mono text-[11px] font-semibold uppercase tracking-widest text-lilac-400">
-                  Seleccioná un perfil ({String(activeIndex + 1).padStart(2, '0')} /{' '}
-                  {String(filteredMembers.length).padStart(2, '0')})
+                  Seleccioná un perfil (
+                  {String(activeIndex + 1).padStart(2, "0")} /{" "}
+                  {String(filteredMembers.length).padStart(2, "0")})
                 </span>
 
                 <div className="flex items-center gap-1.5">
@@ -358,7 +388,7 @@ export function LineupSection() {
                       type="button"
                       onClick={() => setSelectedId(member.id)}
                       onMouseEnter={(e) => {
-                        if (e.pointerType !== 'touch') setSelectedId(member.id);
+                        if (e.pointerType !== "touch") setSelectedId(member.id);
                       }}
                       data-cursor-label={member.name.toUpperCase()}
                       className="group flex shrink-0 flex-col items-center gap-1.5 focus:outline-none"
@@ -366,8 +396,8 @@ export function LineupSection() {
                       <span
                         className={`relative block h-14 w-14 overflow-hidden rounded-full border-2 transition-all duration-200 sm:h-16 sm:w-16 ${
                           isCurrent
-                            ? 'scale-105 border-pink-400 shadow-glow-pink-sm'
-                            : 'border-cyan-300/25 opacity-65 group-hover:opacity-100 group-hover:border-cyan-300'
+                            ? "scale-105 border-pink-400 shadow-glow-pink-sm"
+                            : "border-cyan-300/25 opacity-65 group-hover:opacity-100 group-hover:border-cyan-300"
                         }`}
                       >
                         <img
@@ -382,7 +412,9 @@ export function LineupSection() {
                       </span>
                       <span
                         className={`max-w-[74px] truncate whitespace-nowrap font-mono text-[10px] font-bold uppercase tracking-wider transition-colors ${
-                          isCurrent ? 'text-cyan-300' : 'text-lilac-400 group-hover:text-white'
+                          isCurrent
+                            ? "text-cyan-300"
+                            : "text-lilac-400 group-hover:text-white"
                         }`}
                       >
                         {member.name}
@@ -422,10 +454,14 @@ export function LineupSection() {
               height={1350}
               alt={`${activeMember.name} — ${activeMember.role}`}
               decoding="async"
-              initial={prefersReduced ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
+              initial={
+                prefersReduced ? { opacity: 1 } : { opacity: 0, scale: 0.96 }
+              }
               animate={{ opacity: 1, scale: 1 }}
-              exit={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              exit={
+                prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.96 }
+              }
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="mx-auto block max-h-[calc(92dvh-150px)] w-auto max-w-full rounded-md border border-cyan-300/25 object-contain sm:max-h-[calc(88dvh-135px)]"
             />
           </AnimatePresence>

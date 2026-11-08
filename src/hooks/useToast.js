@@ -1,10 +1,10 @@
-import { useContext } from 'react';
-import { ToastContext } from '@/context/ToastContextValue';
+import { useContext } from "react";
+import { ToastContext } from "@/context/ToastContextValue";
 
 export function useToast() {
   const ctx = useContext(ToastContext);
   if (!ctx) {
-    throw new Error('useToast debe usarse dentro de <ToastProvider>.');
+    throw new Error("useToast debe usarse dentro de <ToastProvider>.");
   }
   return ctx;
 }
