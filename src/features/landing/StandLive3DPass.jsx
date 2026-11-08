@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckCircle2,
   ChevronDown,
@@ -7,10 +7,10 @@ import {
   Instagram,
   Stamp,
   Store,
-} from 'lucide-react';
-import { HexBadge } from '@/components/ui/HexBadge';
-import { Tilt3DCard } from '@/components/ui/Tilt3DCard';
-import { formatArPhoneDisplay, sanitizeInstagramInput } from '@/lib/validators';
+} from "lucide-react";
+import { HexBadge } from "@/components/ui/HexBadge";
+import { Tilt3DCard } from "@/components/ui/Tilt3DCard";
+import { formatArPhoneDisplay, sanitizeInstagramInput } from "@/lib/validators";
 
 /**
  * Credencial Colgante (Lanyard Badge) 3D en tiempo real:
@@ -27,16 +27,16 @@ export function StandLive3DPass({
   const [showRawMessage, setShowRawMessage] = useState(false);
 
   const cleanInstagram = form.noInstagram
-    ? 'Sin red aún'
-    : sanitizeInstagramInput(form.instagram) || '@tu_emprendimiento';
+    ? "Sin red aún"
+    : sanitizeInstagramInput(form.instagram) || "@tu_emprendimiento";
   const formattedPhone = form.whatsapp
     ? formatArPhoneDisplay(form.whatsapp)
-    : '+54 9 381 ··· ····';
+    : "+54 9 381 ··· ····";
 
   const checklist = [
-    { label: 'Identidad', ok: step1Valid },
-    { label: 'Espacio', ok: step2Valid },
-    { label: 'Catálogo', ok: step3Valid },
+    { label: "Identidad", ok: step1Valid },
+    { label: "Espacio", ok: step2Valid },
+    { label: "Catálogo", ok: step3Valid },
   ];
 
   return (
@@ -67,20 +67,23 @@ export function StandLive3DPass({
             <span className="whitespace-nowrap font-mono text-[11px] font-semibold uppercase tracking-widest text-cyan-300">
               PASE EXPOSITOR · #TS3
             </span>
-            <HexBadge tone={form.category ? 'pink' : 'neutral'} icon={Store}>
-              {form.category || 'Elegí rubro'}
+            <HexBadge tone={form.category ? "pink" : "neutral"} icon={Store}>
+              {form.category || "Elegí rubro"}
             </HexBadge>
           </div>
 
           {/* Nombre del emprendimiento + Instagram */}
           <div className="mt-4 border-b border-dashed border-cyan-300/25 pb-4">
             <h3 className="truncate whitespace-nowrap font-display text-2xl uppercase tracking-wide text-white">
-              {form.brandName.trim() || 'TU EMPRENDIMIENTO'}
+              {form.brandName.trim() || "TU EMPRENDIMIENTO"}
             </h3>
 
             <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-lilac-200">
               <span className="inline-flex items-center gap-1 whitespace-nowrap text-pink-300">
-                <Instagram className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <Instagram
+                  className="h-3.5 w-3.5 shrink-0"
+                  aria-hidden="true"
+                />
                 <span className="truncate">{cleanInstagram}</span>
               </span>
               {form.secondaryCategory ? (
@@ -98,7 +101,7 @@ export function StandLive3DPass({
                 Responsable
               </dt>
               <dd className="truncate whitespace-nowrap font-semibold text-white">
-                {form.contactName.trim() || 'Nombre y apellido'}
+                {form.contactName.trim() || "Nombre y apellido"}
               </dd>
             </div>
 
@@ -116,7 +119,7 @@ export function StandLive3DPass({
                 Formato
               </dt>
               <dd className="truncate whitespace-nowrap font-semibold text-white">
-                {form.spacePreference || '1 Puesto estándar'}
+                {form.spacePreference || "1 Puesto estándar"}
               </dd>
             </div>
 
@@ -125,7 +128,7 @@ export function StandLive3DPass({
                 Historial
               </dt>
               <dd className="truncate whitespace-nowrap font-semibold text-white">
-                {form.experience || '1.ª vez en Tokyo Street'}
+                {form.experience || "1.ª vez en Tokyo Street"}
               </dd>
             </div>
           </dl>
@@ -143,13 +146,15 @@ export function StandLive3DPass({
           <div className="mt-4">
             <div className="flex items-center justify-between gap-2 whitespace-nowrap text-xs font-semibold">
               <span className="text-lilac-200">Progreso de solicitud</span>
-              <span className="font-mono text-cyan-300">{completionPercent}%</span>
+              <span className="font-mono text-cyan-300">
+                {completionPercent}%
+              </span>
             </div>
             <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-pill bg-navy-950">
               <motion.div
                 initial={false}
                 animate={{ width: `${completionPercent}%` }}
-                transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+                transition={{ type: "spring", stiffness: 260, damping: 26 }}
                 className="h-full rounded-pill bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500"
               />
             </div>
@@ -159,11 +164,14 @@ export function StandLive3DPass({
                 <span
                   key={item.label}
                   className={`inline-flex items-center gap-1 whitespace-nowrap font-mono text-[11px] font-semibold transition-colors ${
-                    item.ok ? 'text-ok' : 'text-lilac-400'
+                    item.ok ? "text-ok" : "text-lilac-400"
                   }`}
                 >
                   {item.ok ? (
-                    <CheckCircle2 className="h-3 w-3 shrink-0" aria-hidden="true" />
+                    <CheckCircle2
+                      className="h-3 w-3 shrink-0"
+                      aria-hidden="true"
+                    />
                   ) : (
                     <Circle className="h-3 w-3 shrink-0" aria-hidden="true" />
                   )}
@@ -185,7 +193,7 @@ export function StandLive3DPass({
             <span>Vista previa del mensaje WhatsApp</span>
             <ChevronDown
               className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
-                showRawMessage ? 'rotate-180 text-pink-400' : ''
+                showRawMessage ? "rotate-180 text-pink-400" : ""
               }`}
               aria-hidden="true"
             />
@@ -196,7 +204,7 @@ export function StandLive3DPass({
               <motion.div
                 key="live-wa-preview"
                 initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
+                animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.22 }}
                 className="overflow-hidden"
