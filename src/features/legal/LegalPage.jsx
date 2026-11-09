@@ -26,7 +26,7 @@ const LEGAL_TABS = [
 ];
 
 /**
- * Vista editorial abierta de Documentos Legales (/privacidad y /bases) — CERO CARDS:
+ * Vista editorial abierta de Documentos Legales (/privacidad y /bases):
  * numeración arquitectónica y líneas divisorias de neón con transición interna fluida.
  */
 export default function LegalPage({ docKey = "privacy" }) {
