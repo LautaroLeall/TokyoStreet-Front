@@ -38,13 +38,11 @@ export function formatContestMessage({
   ];
 
   if (normalizeSpaces(stageName)) {
-    lines.push(
-      `• *Nombre artístico / Personaje:* ${normalizeSpaces(stageName)}`,
-    );
+    lines.push(`• *Categoría / Nombre o Grupo:* ${normalizeSpaces(stageName)}`);
   }
 
   if (normalizeSpaces(workDetail)) {
-    lines.push(`• *Tema / Serie de origen:* ${normalizeSpaces(workDetail)}`);
+    lines.push(`• *Canción / Obra / Serie:* ${normalizeSpaces(workDetail)}`);
   }
 
   lines.push(
