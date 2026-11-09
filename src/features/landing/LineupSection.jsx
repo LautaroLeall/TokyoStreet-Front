@@ -23,7 +23,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { scrollToSectionSmooth } from "@/lib/scrollToHero";
 
 /**
- * Sección 03 — Invitados Especiales y Jurados (CERO GRILLA DE CARDS):
+ * Sección 03 — Invitados Especiales y Jurados:
  * Escenario interactivo 3D tipo "Character Select" de anime/videojuego:
  * - Retrato holográfico 3D reactivo al cursor (encuadrado limpio sin repetir pies blancos)
  * - Biografía editorial abierta y selector táctil de retratos de los 9 protagonistas
@@ -322,7 +322,11 @@ export function LineupSection() {
                         data-cursor-label="CONCURSOS"
                         className="inline-flex items-center gap-1.5 whitespace-nowrap text-cyan-300 transition hover:text-pink-400"
                       >
-                        <span>Ver concurso e inscripción</span>
+                        <span>
+                          {activeMember.contestId === "canto"
+                            ? "Ver concurso (Cupos agotados)"
+                            : "Ver concurso e inscripción"}
+                        </span>
                         <ArrowRight
                           className="h-3.5 w-3.5 shrink-0"
                           aria-hidden="true"
