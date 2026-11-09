@@ -68,14 +68,78 @@ export const EVENT_CONFIG = {
       name: "Club Sportivo Floresta",
       shortName: "Club Floresta",
       address: "Av. Colón 471",
+      crossStreets: "Entre Gral. Paz y Gral. Lamadrid",
       city: "San Miguel de Tucumán",
       fullAddress: "Av. Colón 471, San Miguel de Tucumán, Tucumán",
       googleMapsUrl:
         "https://www.google.com/maps/search/?api=1&query=Club+Sportivo+Floresta+Av.+Col%C3%B3n+471+San+Miguel+de+Tucum%C3%A1n",
       embedMapUrl:
         "https://www.google.com/maps?q=Club+Sportivo+Floresta,+Av.+Col%C3%B3n+471,+San+Miguel+de+Tucum%C3%A1n&output=embed",
-      // A4: Líneas de colectivo verificadas. Mientras esté vacío, el bloque permanece oculto.
-      busLines: [],
+      // A4 RESUELTO: Líneas de colectivo verificadas y guía de transporte completa
+      busLines: ["3", "10", "18"],
+      transit: {
+        fare: "$1.700",
+        fareType: "Boleto urbano plano",
+        trackingApp: "Cuándo SUBO",
+        trackingAppDesc:
+          "App oficial (Android / iOS) · llegada de coches en tiempo real",
+        directLines: [
+          {
+            line: "3",
+            type: "Urbana",
+            livery: "Blanco con detalles en Rojo y Azul",
+            badgeColors: "from-blue-600 via-white to-red-600",
+            stop: "Av. Colón y Lamadrid (en la puerta)",
+            detail:
+              "Cualquiera de sus ramales te sirve si te bajás sobre Av. Colón, a escasos metros de la entrada principal.",
+          },
+          {
+            line: "10",
+            type: "Urbana",
+            livery: "Blanco con franjas Verdes y Negras",
+            badgeColors: "from-emerald-500 via-white to-neutral-900",
+            stop: "Misma cuadra / Lamadrid al 2200",
+            detail:
+              "Pasa por la misma cuadra del club o te deja a la vuelta sobre calle Lamadrid.",
+          },
+          {
+            line: "18",
+            type: "Urbana",
+            livery: "Blanco con vivos de color Naranja",
+            badgeColors: "from-orange-500 via-white to-orange-600",
+            stop: "A 1-2 cuadras (calle Gral. Paz)",
+            detail:
+              "Te deja sobre General Paz o calles aledañas para caminar apenas un par de minutos directo al club.",
+          },
+        ],
+        corridor: {
+          title: "Tip del viajero · Av. Mate de Luna",
+          distance: "A 4 cuadras (400 metros)",
+          lines: ["4", "118", "130"],
+          instructions:
+            "Si venís desde Yerba Buena, El Manantial o el centro por Av. Mate de Luna: bajate en Av. Mate de Luna y Av. Colón, y caminás 4 cuadras recto hacia el sur.",
+        },
+        payment: {
+          title: "Medios de pago",
+          warning: "¡Atención! Ya no se utiliza la vieja Tarjeta Ciudadana.",
+          methods: [
+            {
+              name: "Tarjeta SUBE física",
+              desc: "Asegurate de contar con saldo cargado",
+            },
+            {
+              name: "Débito / Crédito Contactless",
+              desc: "Visa o Mastercard sin contacto directo en validador",
+            },
+            {
+              name: "Celular / Reloj con NFC",
+              desc: "App SUBE o billeteras virtuales compatibles",
+            },
+          ],
+          interurbanNote:
+            "Líneas interurbanas (118 y 130) además aceptan código QR de la app Red Bus Tucumán y tarjetas físicas Metropolitana e Independencia.",
+        },
+      },
     },
   },
 
@@ -104,7 +168,7 @@ export const EVENT_CONFIG = {
     ],
     floatingStats: [
       { value: "+70", label: "Stands", jp: "市" },
-      { value: "$450K+", label: "En premios", jp: "賞" },
+      { value: "$650K+", label: "En premios", jp: "賞" },
       { value: "15", label: "Sellos QR", jp: "印" },
     ],
     marqueeItems: [
@@ -202,18 +266,23 @@ export const EVENT_CONFIG = {
     priceFormatted: "$6.500",
     currencyNote: "ARS · Valor por persona",
     online: {
-      badge: "Canal Online",
-      title: "Entrada virtual",
+      badge: "Canal Online Oficial",
+      title: "Entrada virtual vía WhatsApp",
+      contactName: "Sahra Luna",
+      role: "Organización Tokyo Street",
+      phone: "5493813332116",
+      displayPhone: "(381) 333-2116",
+      // A2 RESUELTO: Canal de compra directa coordinada por WhatsApp con Sahra Luna
+      purchaseUrl:
+        "https://wa.me/5493813332116?text=%C2%A1Hola%20Sahra!%20Te%20escribo%20desde%20la%20web%20oficial%20de%20Tokyo%20Street%20para%20comprar%20mi%20entrada%20online%20(2.%C2%AA%20preventa%20%246.500).",
       description:
-        "Adquirila de forma anticipada por el canal oficial de venta online definido por Tokyo Street.",
-      // A2: Cargar aquí la URL cuando la organización la confirme (ej. 'https://...')
-      purchaseUrl: "",
-      ctaEnabled: "Ir al canal de compra",
+        "Adquirila de forma anticipada y directa por WhatsApp con Sahra Luna, encargada oficial de ventas de Tokyo Street.",
+      ctaEnabled: "Comprar por WhatsApp (Sahra Luna)",
       ctaDisabled: "Canal online próximamente",
       disabledHint:
         "El enlace de compra online se habilitará apenas la organización confirme el canal.",
       doorProcedure:
-        "Para el retiro o validación en puerta deberás presentar el nombre y DNI utilizados en la compra, de acuerdo con el procedimiento que establezca la organización.",
+        "Para la validación en puerta deberás presentar tu comprobante de compra y el DNI informado al momento de la reserva.",
     },
     physical: {
       badge: "Punto de Venta Oficial",
@@ -237,6 +306,13 @@ export const EVENT_CONFIG = {
    * Formato internacional sin '+' ni espacios para armado directo https://wa.me/
    */
   whatsappContacts: {
+    sahraLuna: {
+      id: "sahraLuna",
+      label: "Sahra Luna",
+      role: "Organización · Ventas & K-Pop",
+      phone: "5493813332116",
+      displayPhone: "(381) 333-2116",
+    },
     mickySan: {
       id: "mickySan",
       label: "Micky-San",
@@ -393,15 +469,17 @@ export const EVENT_CONFIG = {
     eyebrow: "Subí al escenario",
     title: "Concursos e inscripciones",
     subtitle:
-      "Completá tus datos para armar el mensaje de preinscripción y enviárselo directamente por WhatsApp al jurado correspondiente.",
+      "Consultá las bases, jurados oficiales, premios en efectivo y canales de inscripción para subir al escenario de Tokyo Street.",
     whatsappDisclaimer:
-      'Se abrirá WhatsApp con tu mensaje ya preparado; recordá presionar "Enviar". Tu inscripción queda registrada recién cuando el jurado o la organización confirmen su recepción y aceptación.',
+      "Las inscripciones de Cosplay se coordinan con Jony Cosplay, y K-Pop con Sahra Luna vía formulario y WhatsApp. Canto cuenta con cupos agotados, y el Concurso de Dibujo abre su convocatoria la próxima semana.",
     items: [
       {
         id: "canto",
         icon: "mic",
         title: "Concurso de Canto",
-        badge: "Anime & Cultura Geek",
+        badge: "Anime & Geek",
+        status: "closed",
+        closed: true,
         prizes: [
           { place: "1.º lugar", reward: "$150.000 + Diploma" },
           { place: "2.º lugar", reward: "$50.000 + Diploma" },
@@ -410,6 +488,7 @@ export const EVENT_CONFIG = {
         minAgeError:
           "El Concurso de Canto es exclusivo para participantes de 13 años en adelante.",
         requirements: [
+          "Inscripciones cerradas · Cupos completos para esta edición.",
           "Exclusivo para participantes de 13 años en adelante.",
           "Destinado a amateurs (no profesionales ni profesores de canto).",
           "Temática Anime o cultura geek · Se requiere entrada al evento.",
@@ -433,6 +512,7 @@ export const EVENT_CONFIG = {
         icon: "sparkles",
         title: "Concurso Cosplay",
         badge: "Performance & Confección",
+        status: "open",
         prizes: [
           { place: "1.º lugar", reward: "$150.000 + Diploma" },
           { place: "2.º lugar", reward: "$50.000 + Diploma" },
@@ -440,9 +520,9 @@ export const EVENT_CONFIG = {
         minAge: null,
         minAgeError: "",
         requirements: [
-          "Demostrá tu creatividad, dedicación y puesta en escena con tu personaje.",
+          "Demostrá tu creatividad, dedicación y puesta en escena.",
           "Evaluado en escenario por el jurado oficial de Cosplay.",
-          "Inscripciones vía WhatsApp 381 344-8263 o Instagram @Jony_cosplay.",
+          "Inscripciones vía WhatsApp o Instagram @Jony_cosplay.",
         ],
         jurorContacts: ["jonyCosplay"],
         jurorDisplay: "Jony Cosplay y Robin",
@@ -467,6 +547,7 @@ export const EVENT_CONFIG = {
         icon: "award",
         title: "Pasarela Cosplay",
         badge: "Desfile en escenario",
+        status: "open",
         prizes: [
           { place: "1.º lugar", reward: "$50.000 + Diploma" },
           { place: "2.º lugar", reward: "Diploma" },
@@ -474,9 +555,9 @@ export const EVENT_CONFIG = {
         minAge: null,
         minAgeError: "",
         requirements: [
-          "Ideal para lucir todo tu talento y traje en pasarela sin rutina extensa.",
+          "Ideal para lucir todo tu talento y traje en pasarela.",
           "Abierto a todos los estilos dentro de la temática del festival.",
-          "Inscripciones vía WhatsApp 381 344-8263 o Instagram @Jony_cosplay.",
+          "Inscripciones vía WhatsApp o Instagram @Jony_cosplay.",
         ],
         jurorContacts: ["jonyCosplay"],
         jurorDisplay: "Jony Cosplay y Robin",
@@ -500,30 +581,72 @@ export const EVENT_CONFIG = {
         id: "kpop",
         icon: "music",
         title: "Concurso de K-Pop",
-        badge: "Dance & Coreografía",
+        badge: "Grupal & Solista · Dance",
+        status: "open",
         prizes: [
-          { place: "Premios y bases", reward: "Consultar en @tokyostreet.tuc" },
+          { place: "Grupal 1.º", reward: "$100.000 + Diploma" },
+          { place: "Grupal 2.º", reward: "$50.000 + Diploma" },
+          { place: "Solista 1.º", reward: "$50.000 + Diploma" },
+          { place: "Solista 2.º", reward: "Diploma" },
         ],
         minAge: null,
         minAgeError: "",
         requirements: [
-          "Competencia de baile K-Pop llena de energía sobre el escenario principal.",
-          "Evaluado por Ivy, Sabb y Lucy (integrantes del grupo Quantum).",
-          "Consultá apertura de categorías y requisitos en @tokyostreet.tuc.",
+          "¿Tenés un grupo o sos solista? Demostrá tu talento.",
+          "Inscripción coordinada por  WhatsApp con Sahra Luna.",
+          "Para participar es obligatorio contar con entrada al evento.",
+          "Evaluado en escenario por Ivy, Sabb y Lucy.",
         ],
-        jurorContacts: [],
-        jurorDisplay: "Ivy, Sabb y Lucy (Quantum)",
+        jurorContacts: ["sahraLuna"],
+        jurorDisplay: "Ivy, Sabb y Lucy (Quantum) · Coordina Sahra Luna",
         jurorAvatars: [
           { name: "Ivy", src: "/lineup/jurado-kpop-ivy.webp" },
           { name: "Sabb", src: "/lineup/jurado-kpop-sabb.webp" },
           { name: "Lucy", src: "/lineup/jurado-kpop-lucy.webp" },
         ],
         fields: {
-          stageNameLabel: "Nombre de solista o grupo / crew",
-          stageNamePlaceholder: "Ej. Quantum Cover / Solista",
+          stageNameLabel: "Categoría y nombre de solista o grupo",
+          stageNamePlaceholder:
+            "Ej. Grupal — Quantum Cover / Solista — Tu Apodo",
           stageNameRequired: true,
           workLabel: "Canción y grupo/artista K-Pop",
-          workPlaceholder: "Ej. Whiplash — aespa",
+          workPlaceholder: "Ej. Whiplash — aespa (duración aprox. 3:30)",
+        },
+      },
+      {
+        id: "dibujo",
+        icon: "palette",
+        title: "Concurso de Dibujo",
+        badge: "Próximamente",
+        status: "upcoming",
+        upcoming: true,
+        prizes: [
+          { place: "Convocatoria", reward: "Abre la semana que viene" },
+          {
+            place: "Bases y premios",
+            reward: "Próximamente en @tokyostreet.tuc",
+          },
+        ],
+        minAge: null,
+        minAgeError: "",
+        requirements: [
+          "Apertura oficial de bases e inscripciones la próxima semana.",
+          "Espacio exclusivo para ilustradores, artistas y dibujantes.",
+          "Seguí a @tokyostreet.tuc en Instagram para la convocatoria.",
+        ],
+        jurorContacts: [],
+        jurorDisplay: "Organización Tokyo Street",
+        jurorInstagram: {
+          handle: "@tokyostreet.tuc",
+          url: "https://www.instagram.com/tokyostreet.tuc/",
+        },
+        jurorAvatars: [],
+        fields: {
+          stageNameLabel: "Nombre o seudónimo del artista",
+          stageNamePlaceholder: "Ej. @tu_firma / Nombre",
+          stageNameRequired: true,
+          workLabel: "Técnica u obra",
+          workPlaceholder: "Ej. Ilustración tradicional / digital",
         },
       },
     ],
@@ -733,7 +856,7 @@ export const EVENT_CONFIG = {
         id: "entradas-compra",
         question: "¿Cómo compro mi entrada y cuánto cuesta?",
         answer:
-          "La 2.ª preventa tiene un valor de $6.500 ARS. Podés conseguir tu entrada física en Akarumi Yume Manga Café (Muñecas 569) o mediante el canal online oficial cuando esté habilitado. Esta web no cobra directamente: solo informa y deriva a los canales oficiales.",
+          "La 2.ª preventa tiene un valor de $6.500 ARS. Podés conseguir tu entrada física en Akarumi Yume Manga Café (Muñecas 569) o comunicarte de forma directa por WhatsApp con Sahra Luna (+54 9 381 333-2116), encargada oficial de ventas online de Tokyo Street.",
       },
       {
         id: "menores-gratis",
@@ -765,6 +888,13 @@ export const EVENT_CONFIG = {
         question: "Soy emprendedor/a, ¿cómo pido un stand?",
         answer:
           "Completá el configurador de la sección Stands eligiendo tu rubro para enviar la consulta directa al WhatsApp de reservas (381) 333-2116 o por Instagram a @tokyostreet.tuc. Los cupos son limitados y la asignación definitiva la realiza la organización.",
+      },
+      {
+        id: "transporte-como-llegar",
+        question:
+          "¿Cómo llego en colectivo al Club Floresta y cuáles son los medios de pago?",
+        answer:
+          "Te dejan en la puerta o esquina las líneas urbanas 3 (blanco con rojo y azul), 10 (blanco con verde y negro) y 18 (blanco con vivos naranja). Si venís por Av. Mate de Luna (Yerba Buena, El Manantial o centro), podés tomar las líneas 4, 118 o 130, bajarte en Av. Mate de Luna y Av. Colón, y caminar 4 cuadras recto hacia el sur. El boleto urbano plano cuesta $1.700 y se paga con tarjeta SUBE física, tarjetas de Débito/Crédito Contactless (Visa/Mastercard) o celular/reloj con NFC (ya no rige la Tarjeta Ciudadana). Podés seguir los coches en vivo con la app oficial «Cuándo SUBO».",
       },
     ],
   },
