@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Plus } from "lucide-react";
 
 /**
- * Acordeón editorial abierto (CERO CARDS):
+ * Acordeón editorial abierto:
  * líneas divisorias finas de neón, numeración 01..N y signo + giratorio a 45°.
  */
 export function Accordion({ items = [], defaultOpenId = null }) {
