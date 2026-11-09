@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Calendar,
   ExternalLink,
+  Lock,
   MessageCircle,
   Music,
   Phone,
@@ -202,146 +203,281 @@ export function ContestInscriptionModal({ contest, onClose }) {
     <BottomSheetModal
       open={Boolean(contest)}
       onClose={onClose}
-      closeOnBackdrop={false}
-      closeOnEscape={false}
+      closeOnBackdrop={targetContest?.status === "closed"}
+      closeOnEscape={targetContest?.status === "closed"}
       title={targetContest?.title || "Preinscripción"}
       subtitle={
         targetContest
-          ? `Preinscripción vía WhatsApp · Jurado: ${targetContest.jurorDisplay}`
+          ? targetContest.status === "closed"
+            ? "Cupos completos para esta 3.ª edición"
+            : `Preinscripción vía WhatsApp · Jurado: ${targetContest.jurorDisplay}`
           : ""
       }
     >
       {targetContest ? (
-        <AnimatePresence mode="wait" initial={false}>
-          {pendingPreview ? (
-            <motion.div
-              key="contest-preview-step"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              className="space-y-4"
-            >
-              <StampConfirmationBurst
-                badgeTitle="Preinscripción lista"
-                subtitle={`Destinatario: ${pendingPreview.jurorLabel}`}
-              />
-
-              <div className="rounded-md border border-cyan-300/35 bg-cyan-400/10 p-3.5 text-xs leading-relaxed text-white">
-                Copiá tu ficha de preinscripción para{" "}
-                <strong>{pendingPreview.jurorLabel}</strong> y enviala por
-                mensaje directo al canal oficial{" "}
-                <strong className="text-cyan-300">
-                  {EVENT_CONFIG.brand.instagramHandle}
-                </strong>{" "}
-                para consultar apertura de categorías y bases.
-              </div>
-
-              <pre className="whitespace-pre-wrap rounded-md border border-cyan-300/25 bg-navy-950 p-3.5 font-sans text-xs leading-relaxed text-lilac-200">
-                {pendingPreview.message}
-              </pre>
-
-              <div className="flex flex-col gap-2.5 sm:flex-row">
-                <AnimatedCopyButton
-                  copied={copied}
-                  onCopy={handleCopyMessage}
-                  idleLabel="Copiar mensaje"
-                  copiedLabel="¡Mensaje copiado!"
-                  fullWidth
+        targetContest.status === "closed" ? (
+          <div className="space-y-4 py-6 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-pink-500/40 bg-pink-950/70 text-pink-400 shadow-glow-pink-sm">
+              <Lock className="h-6 w-6" aria-hidden="true" />
+            </div>
+            <h3 className="font-display text-xl uppercase tracking-wide text-white">
+              Inscripciones cerradas
+            </h3>
+            <p className="mx-auto max-w-sm text-sm leading-relaxed text-lilac-300">
+              El {targetContest.title} ya completó la totalidad de sus cupos
+              para esta 3.ª edición. ¡Te esperamos para alentar a los
+              participantes en el escenario!
+            </p>
+            <div className="pt-2">
+              <NeonButton variant="secondary" fullWidth onClick={onClose}>
+                Entendido
+              </NeonButton>
+            </div>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait" initial={false}>
+            {pendingPreview ? (
+              <motion.div
+                key="contest-preview-step"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="space-y-4"
+              >
+                <StampConfirmationBurst
+                  badgeTitle="Preinscripción lista"
+                  subtitle={`Destinatario: ${pendingPreview.jurorLabel}`}
                 />
-                <NeonButton
-                  as="a"
-                  href={EVENT_CONFIG.brand.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="secondary"
-                  fullWidth
+
+                <div className="rounded-md border border-cyan-300/35 bg-cyan-400/10 p-3.5 text-xs leading-relaxed text-white">
+                  Copiá tu ficha de preinscripción para{" "}
+                  <strong>{pendingPreview.jurorLabel}</strong> y enviala por
+                  mensaje directo al canal oficial{" "}
+                  <strong className="text-cyan-300">
+                    {EVENT_CONFIG.brand.instagramHandle}
+                  </strong>{" "}
+                  para consultar apertura de categorías y bases.
+                </div>
+
+                <pre className="whitespace-pre-wrap rounded-md border border-cyan-300/25 bg-navy-950 p-3.5 font-sans text-xs leading-relaxed text-lilac-200">
+                  {pendingPreview.message}
+                </pre>
+
+                <div className="flex flex-col gap-2.5 sm:flex-row">
+                  <AnimatedCopyButton
+                    copied={copied}
+                    onCopy={handleCopyMessage}
+                    idleLabel="Copiar mensaje"
+                    copiedLabel="¡Mensaje copiado!"
+                    fullWidth
+                  />
+                  <NeonButton
+                    as="a"
+                    href={EVENT_CONFIG.brand.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="secondary"
+                    fullWidth
+                  >
+                    <span>Instagram oficial</span>
+                    <ExternalLink
+                      className="h-4 w-4 shrink-0"
+                      aria-hidden="true"
+                    />
+                  </NeonButton>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setPendingPreview(null)}
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-lilac-300 transition hover:text-cyan-300"
                 >
-                  <span>Instagram oficial</span>
-                  <ExternalLink
-                    className="h-4 w-4 shrink-0"
-                    aria-hidden="true"
-                  />
-                </NeonButton>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setPendingPreview(null)}
-                className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-lilac-300 transition hover:text-cyan-300"
+                  <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>Editar mis datos</span>
+                </button>
+              </motion.div>
+            ) : (
+              <motion.form
+                key="contest-form-step"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                onSubmit={handleSubmit}
+                noValidate
+                className="space-y-4"
               >
-                <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>Editar mis datos</span>
-              </button>
-            </motion.div>
-          ) : (
-            <motion.form
-              key="contest-form-step"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              onSubmit={handleSubmit}
-              noValidate
-              className="space-y-4"
-            >
-              <ValidatedField
-                id="contest-fullname"
-                label="Nombre y apellido"
-                required
-                icon={User}
-                error={errors.fullName}
-                touched={touched.fullName}
-                isValid={Boolean(form.fullName.trim()) && !errors.fullName}
-                counter={`${form.fullName.length}/75`}
-              >
-                {({ id, describedBy, invalid, inputClassName }) => (
-                  <input
-                    id={id}
-                    type="text"
-                    autoComplete="name"
-                    maxLength={75}
-                    value={form.fullName}
-                    onChange={(e) => handleChange("fullName", e.target.value)}
-                    onBlur={() => handleBlur("fullName")}
-                    placeholder="Ej. Ana Pérez"
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    className={inputClassName}
-                  />
-                )}
-              </ValidatedField>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <ValidatedField
-                  id="contest-age"
-                  label="Edad"
+                  id="contest-fullname"
+                  label="Nombre y apellido"
                   required
-                  icon={Calendar}
-                  error={errors.age}
-                  touched={touched.age}
-                  isValid={Boolean(form.age) && !errors.age}
-                  hint={
-                    targetContest.minAge
-                      ? `Requisito: ${targetContest.minAge} años o más`
-                      : "En años cumplidos"
-                  }
+                  icon={User}
+                  error={errors.fullName}
+                  touched={touched.fullName}
+                  isValid={Boolean(form.fullName.trim()) && !errors.fullName}
+                  counter={`${form.fullName.length}/75`}
                 >
                   {({ id, describedBy, invalid, inputClassName }) => (
                     <input
                       id={id}
                       type="text"
-                      inputMode="numeric"
-                      maxLength={2}
-                      value={form.age}
+                      autoComplete="name"
+                      maxLength={75}
+                      value={form.fullName}
+                      onChange={(e) => handleChange("fullName", e.target.value)}
+                      onBlur={() => handleBlur("fullName")}
+                      placeholder="Ej. Ana Pérez"
+                      aria-invalid={invalid}
+                      aria-describedby={describedBy}
+                      className={inputClassName}
+                    />
+                  )}
+                </ValidatedField>
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <ValidatedField
+                    id="contest-age"
+                    label="Edad"
+                    required
+                    icon={Calendar}
+                    error={errors.age}
+                    touched={touched.age}
+                    isValid={Boolean(form.age) && !errors.age}
+                    hint={
+                      targetContest.minAge
+                        ? `Requisito: ${targetContest.minAge} años o más`
+                        : "En años cumplidos"
+                    }
+                  >
+                    {({ id, describedBy, invalid, inputClassName }) => (
+                      <input
+                        id={id}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={2}
+                        value={form.age}
+                        onChange={(e) =>
+                          handleChange(
+                            "age",
+                            normalizeDigits(e.target.value).slice(0, 2),
+                          )
+                        }
+                        onBlur={() => handleBlur("age")}
+                        placeholder="Ej. 19"
+                        aria-invalid={invalid}
+                        aria-describedby={describedBy}
+                        className={inputClassName}
+                      />
+                    )}
+                  </ValidatedField>
+
+                  <ValidatedField
+                    id="contest-whatsapp"
+                    label="Tu WhatsApp"
+                    required
+                    icon={Phone}
+                    error={errors.whatsapp}
+                    touched={touched.whatsapp}
+                    isValid={Boolean(form.whatsapp.trim()) && !errors.whatsapp}
+                    hint={
+                      !errors.whatsapp && form.whatsapp
+                        ? formatArPhoneDisplay(form.whatsapp)
+                        : "Sin 0 ni 15"
+                    }
+                  >
+                    {({ id, describedBy, invalid, inputClassName }) => (
+                      <input
+                        id={id}
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        value={form.whatsapp}
+                        onChange={(e) =>
+                          handleChange(
+                            "whatsapp",
+                            sanitizePhoneInput(e.target.value),
+                          )
+                        }
+                        onBlur={() => handleBlur("whatsapp")}
+                        placeholder="Ej. 381 555 1234"
+                        aria-invalid={invalid}
+                        aria-describedby={describedBy}
+                        className={inputClassName}
+                      />
+                    )}
+                  </ValidatedField>
+                </div>
+
+                {jurorOptions.length > 1 ? (
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-lilac-200 sm:text-sm sm:normal-case sm:tracking-normal sm:text-white">
+                      Elegí a qué jurado enviarle tu WhatsApp{" "}
+                      <span className="text-pink-400">*</span>
+                    </span>
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      {jurorOptions.map((juror) => {
+                        const active = form.jurorId === juror.id;
+                        return (
+                          <button
+                            key={juror.id}
+                            type="button"
+                            onClick={() => handleChange("jurorId", juror.id)}
+                            className={`flex items-center gap-3 rounded-md border px-3 py-2.5 text-left transition ${
+                              active
+                                ? "border-pink-400 bg-pink-600/20 text-white shadow-glow-pink-sm"
+                                : "border-cyan-300/25 bg-navy-950/80 text-lilac-200 hover:border-cyan-300/55"
+                            }`}
+                          >
+                            {juror.avatar ? (
+                              <img
+                                src={juror.avatar}
+                                width={36}
+                                height={36}
+                                alt={juror.label}
+                                loading="lazy"
+                                decoding="async"
+                                className="h-9 w-9 shrink-0 rounded-full border border-cyan-300/50 object-cover object-[50%_18%]"
+                              />
+                            ) : null}
+                            <div className="min-w-0">
+                              <p className="truncate whitespace-nowrap text-sm font-bold text-white">
+                                {juror.label}
+                              </p>
+                              {juror.displayPhone ? (
+                                <p className="truncate whitespace-nowrap font-mono text-[11px] text-cyan-300">
+                                  {juror.displayPhone}
+                                </p>
+                              ) : null}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
+
+                <ValidatedField
+                  id="contest-stagename"
+                  label={targetContest.fields.stageNameLabel}
+                  required={targetContest.fields.stageNameRequired}
+                  icon={Sparkles}
+                  error={errors.stageName}
+                  touched={touched.stageName}
+                  isValid={Boolean(form.stageName.trim()) && !errors.stageName}
+                  counter={`${form.stageName.length}/90`}
+                >
+                  {({ id, describedBy, invalid, inputClassName }) => (
+                    <input
+                      id={id}
+                      type="text"
+                      maxLength={90}
+                      value={form.stageName}
                       onChange={(e) =>
-                        handleChange(
-                          "age",
-                          normalizeDigits(e.target.value).slice(0, 2),
-                        )
+                        handleChange("stageName", e.target.value)
                       }
-                      onBlur={() => handleBlur("age")}
-                      placeholder="Ej. 19"
+                      onBlur={() => handleBlur("stageName")}
+                      placeholder={targetContest.fields.stageNamePlaceholder}
                       aria-invalid={invalid}
                       aria-describedby={describedBy}
                       className={inputClassName}
@@ -350,182 +486,76 @@ export function ContestInscriptionModal({ contest, onClose }) {
                 </ValidatedField>
 
                 <ValidatedField
-                  id="contest-whatsapp"
-                  label="Tu WhatsApp"
+                  id="contest-work"
+                  label={targetContest.fields.workLabel}
                   required
-                  icon={Phone}
-                  error={errors.whatsapp}
-                  touched={touched.whatsapp}
-                  isValid={Boolean(form.whatsapp.trim()) && !errors.whatsapp}
-                  hint={
-                    !errors.whatsapp && form.whatsapp
-                      ? formatArPhoneDisplay(form.whatsapp)
-                      : "Sin 0 ni 15"
+                  icon={Music}
+                  error={errors.workDetail}
+                  touched={touched.workDetail}
+                  isValid={
+                    Boolean(form.workDetail.trim()) && !errors.workDetail
                   }
+                  counter={`${form.workDetail.length}/110`}
                 >
                   {({ id, describedBy, invalid, inputClassName }) => (
                     <input
                       id={id}
-                      type="tel"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      value={form.whatsapp}
+                      type="text"
+                      maxLength={110}
+                      value={form.workDetail}
                       onChange={(e) =>
-                        handleChange(
-                          "whatsapp",
-                          sanitizePhoneInput(e.target.value),
-                        )
+                        handleChange("workDetail", e.target.value)
                       }
-                      onBlur={() => handleBlur("whatsapp")}
-                      placeholder="Ej. 381 555 1234"
+                      onBlur={() => handleBlur("workDetail")}
+                      placeholder={targetContest.fields.workPlaceholder}
                       aria-invalid={invalid}
                       aria-describedby={describedBy}
                       className={inputClassName}
                     />
                   )}
                 </ValidatedField>
-              </div>
 
-              {jurorOptions.length > 1 ? (
-                <div className="flex flex-col gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-lilac-200 sm:text-sm sm:normal-case sm:tracking-normal sm:text-white">
-                    Elegí a qué jurado enviarle tu WhatsApp{" "}
-                    <span className="text-pink-400">*</span>
-                  </span>
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {jurorOptions.map((juror) => {
-                      const active = form.jurorId === juror.id;
-                      return (
-                        <button
-                          key={juror.id}
-                          type="button"
-                          onClick={() => handleChange("jurorId", juror.id)}
-                          className={`flex items-center gap-3 rounded-md border px-3 py-2.5 text-left transition ${
-                            active
-                              ? "border-pink-400 bg-pink-600/20 text-white shadow-glow-pink-sm"
-                              : "border-cyan-300/25 bg-navy-950/80 text-lilac-200 hover:border-cyan-300/55"
-                          }`}
-                        >
-                          {juror.avatar ? (
-                            <img
-                              src={juror.avatar}
-                              width={36}
-                              height={36}
-                              alt={juror.label}
-                              loading="lazy"
-                              decoding="async"
-                              className="h-9 w-9 shrink-0 rounded-full border border-cyan-300/50 object-cover object-[50%_18%]"
-                            />
-                          ) : null}
-                          <div className="min-w-0">
-                            <p className="truncate whitespace-nowrap text-sm font-bold text-white">
-                              {juror.label}
-                            </p>
-                            {juror.displayPhone ? (
-                              <p className="truncate whitespace-nowrap font-mono text-[11px] text-cyan-300">
-                                {juror.displayPhone}
-                              </p>
-                            ) : null}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                <div className="pt-1">
+                  <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-lilac-200">
+                    <input
+                      type="checkbox"
+                      checked={form.acceptedTerms}
+                      onChange={(e) =>
+                        handleChange("acceptedTerms", e.target.checked)
+                      }
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-cyan-300/40 bg-navy-950 text-pink-600 accent-pink-600"
+                    />
+                    <span>
+                      Comprendo que este formulario prepara mi mensaje para
+                      WhatsApp y que la inscripción queda sujeta a la recepción
+                      y confirmación del jurado u organización.
+                    </span>
+                  </label>
+                  {touched.acceptedTerms && errors.acceptedTerms ? (
+                    <p
+                      role="alert"
+                      className="mt-1.5 text-xs font-medium text-bad"
+                    >
+                      {errors.acceptedTerms}
+                    </p>
+                  ) : null}
                 </div>
-              ) : null}
 
-              <ValidatedField
-                id="contest-stagename"
-                label={targetContest.fields.stageNameLabel}
-                required={targetContest.fields.stageNameRequired}
-                icon={Sparkles}
-                error={errors.stageName}
-                touched={touched.stageName}
-                isValid={Boolean(form.stageName.trim()) && !errors.stageName}
-                counter={`${form.stageName.length}/90`}
-              >
-                {({ id, describedBy, invalid, inputClassName }) => (
-                  <input
-                    id={id}
-                    type="text"
-                    maxLength={90}
-                    value={form.stageName}
-                    onChange={(e) => handleChange("stageName", e.target.value)}
-                    onBlur={() => handleBlur("stageName")}
-                    placeholder={targetContest.fields.stageNamePlaceholder}
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    className={inputClassName}
+                <div className="rounded-md border border-cyan-300/15 bg-navy-950/75 p-3 text-xs leading-relaxed text-lilac-300">
+                  {EVENT_CONFIG.contests.whatsappDisclaimer}
+                </div>
+
+                <NeonButton type="submit" variant="primary" size="xl" fullWidth>
+                  <MessageCircle
+                    className="h-5 w-5 shrink-0"
+                    aria-hidden="true"
                   />
-                )}
-              </ValidatedField>
-
-              <ValidatedField
-                id="contest-work"
-                label={targetContest.fields.workLabel}
-                required
-                icon={Music}
-                error={errors.workDetail}
-                touched={touched.workDetail}
-                isValid={Boolean(form.workDetail.trim()) && !errors.workDetail}
-                counter={`${form.workDetail.length}/110`}
-              >
-                {({ id, describedBy, invalid, inputClassName }) => (
-                  <input
-                    id={id}
-                    type="text"
-                    maxLength={110}
-                    value={form.workDetail}
-                    onChange={(e) => handleChange("workDetail", e.target.value)}
-                    onBlur={() => handleBlur("workDetail")}
-                    placeholder={targetContest.fields.workPlaceholder}
-                    aria-invalid={invalid}
-                    aria-describedby={describedBy}
-                    className={inputClassName}
-                  />
-                )}
-              </ValidatedField>
-
-              <div className="pt-1">
-                <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-lilac-200">
-                  <input
-                    type="checkbox"
-                    checked={form.acceptedTerms}
-                    onChange={(e) =>
-                      handleChange("acceptedTerms", e.target.checked)
-                    }
-                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-cyan-300/40 bg-navy-950 text-pink-600 accent-pink-600"
-                  />
-                  <span>
-                    Comprendo que este formulario prepara mi mensaje para
-                    WhatsApp y que la inscripción queda sujeta a la recepción y
-                    confirmación del jurado u organización.
-                  </span>
-                </label>
-                {touched.acceptedTerms && errors.acceptedTerms ? (
-                  <p
-                    role="alert"
-                    className="mt-1.5 text-xs font-medium text-bad"
-                  >
-                    {errors.acceptedTerms}
-                  </p>
-                ) : null}
-              </div>
-
-              <div className="rounded-md border border-cyan-300/15 bg-navy-950/75 p-3 text-xs leading-relaxed text-lilac-300">
-                {EVENT_CONFIG.contests.whatsappDisclaimer}
-              </div>
-
-              <NeonButton type="submit" variant="primary" size="xl" fullWidth>
-                <MessageCircle
-                  className="h-5 w-5 shrink-0"
-                  aria-hidden="true"
-                />
-                <span>Preparar por WhatsApp</span>
-              </NeonButton>
-            </motion.form>
-          )}
-        </AnimatePresence>
+                  <span>Preparar por WhatsApp</span>
+                </NeonButton>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        )
       ) : null}
     </BottomSheetModal>
   );
