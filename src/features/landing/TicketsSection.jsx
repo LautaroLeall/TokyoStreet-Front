@@ -93,7 +93,7 @@ export function TicketsSection() {
           </Tilt3DCard>
         </RevealBlock>
 
-        {/* Dos canales abiertos divididos por línea arquitectónica (SIN CARDS) */}
+        {/* Dos canales abiertos divididos por línea arquitectónica */}
         <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-0 md:divide-x md:divide-cyan-300/20">
           {/* Canal 01: Entrada Virtual */}
           <RevealBlock
@@ -113,6 +113,18 @@ export function TicketsSection() {
               <p className="mt-2.5 text-sm leading-relaxed text-lilac-200 sm:text-base">
                 {tickets.online.description}
               </p>
+
+              {tickets.online.contactName ? (
+                <div className="mt-3 flex items-center gap-2 font-mono text-xs text-pink-300">
+                  <span className="whitespace-nowrap">
+                    Encargada:{" "}
+                    <strong className="text-white">
+                      {tickets.online.contactName}
+                    </strong>{" "}
+                    · {tickets.online.displayPhone}
+                  </span>
+                </div>
+              ) : null}
 
               <p className="mt-4 border-l-2 border-cyan-300/60 pl-3.5 text-xs leading-relaxed text-lilac-300">
                 <strong className="font-semibold text-cyan-300">
