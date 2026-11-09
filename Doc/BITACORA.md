@@ -31,10 +31,10 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
 
 ### Pendientes de la organización para completar configuración en `event.config.js`
 
-- `A2`: URL del canal online de venta de entradas (`tickets.online.purchaseUrl`).
+- `A2`: **RESUELTO** (Canal oficial de venta de entradas online por WhatsApp con Sahra Luna `(381) 333-2116`).
 - `A3`: Horarios de atención de Akarumi Yume Manga Café (`tickets.physical.hours`).
-- `A4`: Líneas de colectivo verificadas (`event.venue.busLines`).
-- `A5`: Números de WhatsApp definitivos de `mickySan`, `pola`, `jonyCosplay` y `standsReservations`.
+- `A4`: **RESUELTO** (Líneas 3, 10, 18 en la puerta, corredor 4, 118, 130 por Mate de Luna, medios de pago SUBE/Contactless/NFC, boleto $1.700 y app Cuándo SUBO).
+- `A5`: **RESUELTO** (WhatsApp oficiales de jurados y reservas de stands vinculados).
 - `C1`: Aprobación final del texto de Privacidad y Bases y Condiciones.
 
 ---
@@ -89,5 +89,20 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
   - **Eliminación de código, CSS y dependencias sin uso**: borrado de `FormField.jsx`, `formFieldStyles.js` y `SurfaceCard.jsx`; desinstalación de `@types/react` y `@types/react-dom`; y limpieza de selectores huérfanos en `index.css` (`.single-line`, `.neon-divider`, `.translate-z-12`, `.hex-ribbon`), preservando `@supabase/supabase-js`, `supabaseClient.js` y `validateDni` listos para la **Entrega 2** (`Backend/` + Pasaporte en vivo, `0 KB` de impacto hoy).
   - **Desduplicación escalable**: centralización de `formatCountdownUnits` en `time.js`, hook compartido `usePassportSimulator.js` para el simulador de 15 sellos (`PassportTeaserSection` + `PassportEntryPage`), y componente `PortalStatusCard.jsx` compartido entre `/s/:token`, `/stand` y `/org`.
   - **Optimización de carga móvil, LCP y caché CDN**: importación dinámica bajo demanda de `canvas-confetti` (`confettiBurst.js`), carga diferida solo en escritorio (`>= 1024px`) para `Hero3DStage` (ahorrando también `qrcode.react` en el arranque móvil de `/`), dimensiones explícitas `width`/`height` en retratos `.webp`, prioridad de red limpia para el logo principal y extensión de cabeceras `Cache-Control` en `vercel.json` para `/lineup/*`.
-  - **SEO por ruta y datos estructurados (`usePageMeta.js`, `index.html`)**: actualización dinámica de `<title>`, `meta description`, `<link rel="canonical">` y directiva `noindex, nofollow` en rutas operativas (`/s/:token`, `/stand`, `/org`, `404`), más enriquecimiento de `Schema.org` (`Event`) con monto actualizado de premios (`$450.000+`) y artistas invitados (`ARK`, `Kidd.Moi`, `Quantum`).
+  - **SEO por ruta y datos estructurados (`usePageMeta.js`, `index.html`)**: actualización dinámica de `<title>`, `meta description`, `<link rel="canonical">` y directiva `noindex, nofollow` en rutas operativas (`/s/:token`, `/stand`, `/org`, `404`), más enriquecimiento de `Schema.org` (`Event`) con monto actualizado de premios (`$650.000+`) y artistas invitados (`ARK`, `Kidd.Moi`, `Quantum`).
   - **Pantalla `404` Autónoma e Inmersiva en 3D (`NotFoundPage.jsx`, `AppShell.jsx`, `knownRoutes.js`)**: ocultación total de `TopNavbar` y `SiteFooter` en rutas inexistentes conservando el fondo WebGL 3D activo (`variant="hero"`), más monumento holográfico `404` multicapa en CSS 3D real (`translateZ(-55px)` a `+64px`) reactivo al cursor con anillos giroscópicos, carteles verticales estilo Shibuya (`迷子` / `東京`), escáner láser, interferencia cromática anime, giro interactivo de `360°` con onda expansiva al hacer clic y acciones magnéticas de retorno.
+- **Actualización de Cartelera de Concursos (`event.config.js`, `ContestsSection.jsx`, `ContestInscriptionModal.jsx`)**:
+  - **Concurso de Canto cerrado por cupos completos**: etiqueta de aviso `Cupos agotados`, botón deshabilitado que impide inscripciones adicionales y resguardo interno en modal informativo.
+  - **Concurso de K-Pop confirmado con premios y canal oficial**: incorporación de las categorías Grupal (1.º \$100.000 + Diploma / 2.º \$50.000 + Diploma) y Solista (1.º \$50.000 + Diploma / 2.º Diploma), evaluado por Quantum con enlace directo de inscripción vía DM de Instagram a `@tokyostreet.tuc`.
+  - **Anuncio del nuevo Concurso de Dibujo**: 5.ª competencia incorporada con ícono temático `Palette`, estado `Próximamente · Abre la semana que viene` y enlace a novedades en Instagram.
+  - **Pozo total de premios en efectivo actualizado a \$650.000+**: reflejado en métricas del Hero y Open Graph.
+- **Guía de Transporte Urbano Oficial y Medios de Pago (`E2-9`, `A4 Resuelto`)**:
+  - **Líneas directas en la puerta (`event.config.js`, `ScheduleLocationSection.jsx`)**: incorporación de **Línea 3** (blanco con rojo y azul, parada Av. Colón y Lamadrid), **Línea 10** (blanco con verde y negro, parada misma cuadra o Lamadrid al 2200) y **Línea 18** (blanco con vivos naranja, parada a 1-2 cuadras sobre Gral. Paz).
+  - **Corredor Av. Mate de Luna a 4 cuadras (400 m al sur)**: guía de combinación para asistentes desde Yerba Buena, El Manantial o microcentro con **Líneas 4, 118 y 130** bajando en Av. Mate de Luna y Av. Colón.
+  - **Medios de pago y tarifa plana en San Miguel de Tucumán**: especificación del boleto urbano plano a **\$1.700**, compatibilidad con **Tarjeta SUBE física**, **Débito / Crédito Contactless (Visa/Mastercard)** y **NFC (celular/reloj)**, con advertencia explícita sobre el fin del uso de la Tarjeta Ciudadana (y habilitación de QR Red Bus Tucumán y tarjetas Metropolitana/Independencia en interurbanas 118/130).
+  - **App oficial en tiempo real**: recomendación de la app oficial **Cuándo SUBO** (Android / iOS) para ver la frecuencia en directo de las líneas 3, 10 y 18.
+  - **Nueva pregunta en FAQ (`faq.items`)**: respuesta detallada sobre cómo llegar en colectivo y cómo abonar el boleto.
+- **Canal Oficial de Venta Online y Formulario de Inscripción para K-Pop (`E2-3`, `E2-4`, `A2 Resuelto`)**:
+  - **Venta de entradas online oficial (`tickets.online`, `TicketsSection.jsx`)**: canal habilitado por WhatsApp directo con **Sahra Luna** (`+54 9 381 333-2116` / `5493813332116`) con mensaje pre-armado oficial para reserva de 2.ª preventa (\$6.500) y chip de contacto en sección.
+  - **Concurso de K-Pop integrado al formulario interactivo (`contests.items`, `ContestInscriptionModal.jsx`)**: abandono de canal externo de Instagram; K-Pop ahora abre el modal oficial de inscripción web, valida solista/grupo y tema, y redirecciona automáticamente a WhatsApp con el mensaje estructurado hacia Sahra Luna para confirmación.
+  - **Actualización de FAQ (`faq.items`)**: respuesta de compra de entradas actualizada con el canal directo de WhatsApp de Sahra Luna.

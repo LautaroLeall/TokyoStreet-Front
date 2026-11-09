@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Bus, CalendarClock, Clock, ExternalLink, MapPin } from "lucide-react";
+import {
+  Bus,
+  CalendarClock,
+  Clock,
+  Coins,
+  CreditCard,
+  ExternalLink,
+  MapPin,
+  Navigation,
+  Smartphone,
+} from "lucide-react";
 import { EVENT_CONFIG } from "@/content/event.config";
 import { NeonButton } from "@/components/ui/NeonButton";
 import { RevealBlock } from "@/components/ui/RevealMotion";
@@ -13,7 +23,7 @@ const TABS = [
 ];
 
 /**
- * Sección Ubicación y Cronograma — CERO CARDS EXTERIORES:
+ * Sección Ubicación y Cronograma
  * composición abierta estilo cartelera arquitectónica con coordenadas de Tucumán,
  * radar con esquineros HUD y eje horario limpio.
  */
@@ -112,6 +122,11 @@ export function ScheduleLocationSection() {
                       <p className="mt-2 text-base font-semibold text-cyan-300 sm:text-lg">
                         {event.venue.fullAddress}
                       </p>
+                      {event.venue.crossStreets ? (
+                        <p className="mt-1 font-mono text-xs text-lilac-300">
+                          {event.venue.crossStreets}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="divide-y divide-white/10 border-y border-white/10 text-sm text-lilac-200">
@@ -127,29 +142,47 @@ export function ScheduleLocationSection() {
                           {event.shortDateLabel} · {event.hoursLabel}
                         </span>
                       </div>
-                    </div>
 
-                    {hasBusLines ? (
-                      <div className="space-y-2">
-                        <p className="flex items-center gap-2 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-wider text-cyan-300">
-                          <Bus
-                            className="h-4 w-4 shrink-0"
-                            aria-hidden="true"
-                          />
-                          <span>Colectivos cercanos</span>
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {event.venue.busLines.map((line) => (
-                            <span
-                              key={line}
-                              className="whitespace-nowrap border-b border-cyan-300/40 pb-0.5 font-mono text-xs font-semibold text-white"
-                            >
-                              Línea {line}
+                      {event.venue.transit?.fare ? (
+                        <div className="flex items-center justify-between gap-3 py-3">
+                          <span className="inline-flex items-center gap-2 whitespace-nowrap font-mono text-xs uppercase tracking-wider text-lilac-400">
+                            <Coins
+                              className="h-3.5 w-3.5 text-cyan-300"
+                              aria-hidden="true"
+                            />
+                            <span>Boleto urbano plano</span>
+                          </span>
+                          <span className="whitespace-nowrap font-mono font-semibold text-cyan-300">
+                            {event.venue.transit.fare}{" "}
+                            <span className="text-xs font-normal text-lilac-400">
+                              (SMT)
                             </span>
-                          ))}
+                          </span>
                         </div>
-                      </div>
-                    ) : null}
+                      ) : null}
+
+                      {hasBusLines ? (
+                        <div className="flex items-center justify-between gap-3 py-3">
+                          <span className="inline-flex items-center gap-2 whitespace-nowrap font-mono text-xs uppercase tracking-wider text-lilac-400">
+                            <Bus
+                              className="h-3.5 w-3.5 text-pink-400"
+                              aria-hidden="true"
+                            />
+                            <span>Líneas en puerta</span>
+                          </span>
+                          <div className="flex items-center gap-1.5 font-mono text-xs font-semibold text-white">
+                            {event.venue.busLines.map((line) => (
+                              <span
+                                key={line}
+                                className="border border-cyan-300/30 bg-navy-900/80 px-2 py-0.5 text-cyan-300"
+                              >
+                                {line}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
 
                     <div className="pt-1">
                       <NeonButton
@@ -277,6 +310,192 @@ export function ScheduleLocationSection() {
                     </div>
                   </div>
                 </div>
+
+                {/* Guía arquitectónica de transporte urbano*/}
+                {event.venue.transit ? (
+                  <div className="mt-10 border-t border-cyan-300/20 pt-8 sm:mt-12 sm:pt-10">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <p className="whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-[0.18em] text-pink-400">
+                          02 // Conectividad urbana · Tucumán
+                        </p>
+                        <h4 className="mt-1 whitespace-nowrap font-display text-2xl uppercase tracking-wide text-white sm:text-3xl">
+                          Cómo llegar al club
+                        </h4>
+                      </div>
+                      <div className="inline-flex items-center gap-2 whitespace-nowrap font-mono text-xs text-lilac-300">
+                        <Smartphone
+                          className="h-3.5 w-3.5 shrink-0 text-cyan-300"
+                          aria-hidden="true"
+                        />
+                        <span>
+                          App en vivo:{" "}
+                          <strong className="text-white">
+                            {event.venue.transit.trackingApp}
+                          </strong>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Columnas abiertas divididas por líneas arquitectónicas (SIN CARDS) */}
+                    <div className="mt-6 divide-y divide-white/10 border-y border-white/10 lg:grid lg:grid-cols-3 lg:divide-y-0 lg:divide-x lg:divide-white/10">
+                      {/* Columna 01: En la puerta */}
+                      <div className="py-5 lg:py-4 lg:pr-6">
+                        <div className="flex items-center justify-between gap-2 border-b border-cyan-300/20 pb-3">
+                          <span className="flex items-center gap-2 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-wider text-cyan-300">
+                            <Bus
+                              className="h-3.5 w-3.5 shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span>01 · En la puerta</span>
+                          </span>
+                          <span className="whitespace-nowrap font-mono text-[11px] text-lilac-400">
+                            Av. Colón
+                          </span>
+                        </div>
+
+                        <div className="divide-y divide-white/5 text-xs">
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono font-bold text-white">
+                              Línea 3
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-lilac-300">
+                              Blanco, rojo y azul
+                            </span>
+                            <span className="whitespace-nowrap font-mono text-[11px] text-cyan-300">
+                              Puerta
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono font-bold text-white">
+                              Línea 10
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-lilac-300">
+                              Blanco, verde y negro
+                            </span>
+                            <span className="whitespace-nowrap font-mono text-[11px] text-cyan-300">
+                              Misma cuadra
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono font-bold text-white">
+                              Línea 18
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-lilac-300">
+                              Blanco y naranja
+                            </span>
+                            <span className="whitespace-nowrap font-mono text-[11px] text-cyan-300">
+                              A 1 cuadra
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Columna 02: Corredor Mate de Luna */}
+                      <div className="py-5 lg:py-4 lg:px-6">
+                        <div className="flex items-center justify-between gap-2 border-b border-pink-400/20 pb-3">
+                          <span className="flex items-center gap-2 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-wider text-pink-400">
+                            <Navigation
+                              className="h-3.5 w-3.5 shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span>02 · Mate de Luna</span>
+                          </span>
+                          <span className="whitespace-nowrap font-mono text-[11px] text-lilac-400">
+                            A 4 cuadras
+                          </span>
+                        </div>
+
+                        <div className="divide-y divide-white/5 text-xs">
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono font-bold text-white">
+                              Líneas
+                            </span>
+                            <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold text-pink-200">
+                              <span className="border border-pink-400/30 bg-pink-950/40 px-1.5 py-0.5">
+                                4
+                              </span>
+                              <span className="border border-pink-400/30 bg-pink-950/40 px-1.5 py-0.5">
+                                118
+                              </span>
+                              <span className="border border-pink-400/30 bg-pink-950/40 px-1.5 py-0.5">
+                                130
+                              </span>
+                            </div>
+                            <span className="whitespace-nowrap font-mono text-[11px] text-lilac-400">
+                              400 m
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono text-lilac-400">
+                              Parada
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-lilac-200">
+                              Av. Mate de Luna y Colón
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono text-lilac-400">
+                              Acceso
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-cyan-300">
+                              Caminar 4 cuadras recto al sur
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Columna 03: Pago y tarifa */}
+                      <div className="py-5 lg:py-4 lg:pl-6">
+                        <div className="flex items-center justify-between gap-2 border-b border-cyan-300/20 pb-3">
+                          <span className="flex items-center gap-2 whitespace-nowrap font-mono text-xs font-semibold uppercase tracking-wider text-cyan-300">
+                            <CreditCard
+                              className="h-3.5 w-3.5 shrink-0"
+                              aria-hidden="true"
+                            />
+                            <span>03 · Pago & Tarifa</span>
+                          </span>
+                          <span className="whitespace-nowrap font-mono text-[11px] font-bold text-cyan-300">
+                            {event.venue.transit.fare} plano
+                          </span>
+                        </div>
+
+                        <div className="divide-y divide-white/5 text-xs">
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono text-lilac-400">
+                              Habilitado
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-white">
+                              SUBE física · Contactless · NFC
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono text-pink-400">
+                              Aviso
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-pink-300">
+                              Sin Tarjeta Ciudadana
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 py-2.5">
+                            <span className="whitespace-nowrap font-mono text-lilac-400">
+                              Interurbano
+                            </span>
+                            <span className="truncate whitespace-nowrap font-mono text-[11px] text-lilac-300">
+                              118 / 130: QR Red Bus y Metro
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </motion.div>
             ) : (
               <motion.div
