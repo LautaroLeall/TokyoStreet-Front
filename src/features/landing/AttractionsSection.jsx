@@ -26,7 +26,7 @@ const ICON_MAP = {
 };
 
 /**
- * Sección Atractivos — CERO CARDS:
+ * Sección Atractivos
  * Directorio callejero interactivo con líneas finas de neón + Tótem Holográfico 3D vivo
  * que muta en el aire al recorrer o apoyar el cursor sobre cada experiencia.
  */
