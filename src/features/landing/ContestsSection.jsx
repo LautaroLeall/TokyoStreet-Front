@@ -1,10 +1,13 @@
 import { useState } from "react";
 import {
   Award,
+  Clock,
   Instagram,
+  Lock,
   MessageCircle,
   Mic,
   Music,
+  Palette,
   Sparkles,
   Trophy,
   UserCheck,
@@ -21,10 +24,11 @@ const CONTEST_ICONS = {
   sparkles: Sparkles,
   award: Award,
   music: Music,
+  palette: Palette,
 };
 
 /**
- * Sección 04 — Concursos en Escenario (CERO CARDS):
+ * Sección 04 — Concursos en Escenario
  * Franjas abiertas estilo Lineup de Festival Japonés con retratos reales de sus jurados,
  * premios actualizados e inscripción directa por WhatsApp.
  */
@@ -61,18 +65,20 @@ export function ContestsSection() {
                   <div className="flex items-start gap-4 sm:gap-6 lg:col-span-5">
                     <span
                       aria-hidden="true"
-                      className="text-stroke-pink shrink-0 select-none font-display text-4xl leading-none transition-all duration-300 group-hover:scale-105 group-hover:text-pink-400 sm:text-5xl"
+                      className="text-stroke-pink shrink-0 select-none font-display text-4xl leading-none transition-all duration-300 group-hover:scale-105 group-hover:text-pink-400 sm:text-5xl ml-3 mt-1"
                     >
                       {stageNum}
                     </span>
 
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2 whitespace-nowrap font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
-                        <IconComponent
-                          className="h-3.5 w-3.5 shrink-0 text-pink-400"
-                          aria-hidden="true"
-                        />
-                        <span>{contest.badge}</span>
+                      <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
+                        <div className="flex items-center gap-1.5 whitespace-nowrap">
+                          <IconComponent
+                            className="h-3.5 w-3.5 shrink-0 text-pink-400"
+                            aria-hidden="true"
+                          />
+                          <span>{contest.badge}</span>
+                        </div>
                       </div>
 
                       <h3 className="mt-1 truncate whitespace-nowrap font-display text-xl uppercase tracking-wide text-white sm:text-2xl">
@@ -174,19 +180,72 @@ export function ContestsSection() {
 
                   {/* Columna 3: Acción directa */}
                   <div className="flex lg:col-span-2 lg:justify-end">
-                    <NeonButton
-                      variant="primary"
-                      size="md"
-                      fullWidth
-                      data-cursor-label="INSCRIBIR"
-                      onClick={() => setSelectedContest(contest)}
-                    >
-                      <MessageCircle
-                        className="h-4 w-4 shrink-0"
-                        aria-hidden="true"
-                      />
-                      <span>Inscribirme</span>
-                    </NeonButton>
+                    {contest.status === "closed" ? (
+                      <NeonButton
+                        variant="ghost"
+                        size="md"
+                        fullWidth
+                        disabled
+                        className="cursor-not-allowed border-pink-500/35 bg-navy-950/75 text-pink-300 opacity-80"
+                      >
+                        <Lock
+                          className="h-4 w-4 shrink-0 text-pink-400"
+                          aria-hidden="true"
+                        />
+                        <span>Cupos agotados</span>
+                      </NeonButton>
+                    ) : contest.status === "upcoming" ? (
+                      <NeonButton
+                        as="a"
+                        href={EVENT_CONFIG.brand.instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="secondary"
+                        size="md"
+                        fullWidth
+                        data-cursor-label="INSTAGRAM"
+                      >
+                        <Clock
+                          className="h-4 w-4 shrink-0 text-cyan-300"
+                          aria-hidden="true"
+                        />
+                        <span>Próxima semana</span>
+                      </NeonButton>
+                    ) : contest.registrationType === "instagram" ? (
+                      <NeonButton
+                        as="a"
+                        href={
+                          contest.registrationUrl ||
+                          EVENT_CONFIG.brand.instagramUrl
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="primary"
+                        size="md"
+                        fullWidth
+                        data-cursor-label="INSTAGRAM"
+                      >
+                        <Instagram
+                          className="h-4 w-4 shrink-0 text-white"
+                          aria-hidden="true"
+                        />
+                        <span>Inscribirme</span>
+                      </NeonButton>
+                    ) : (
+                      <NeonButton
+                        variant="primary"
+                        size="md"
+                        fullWidth
+                        data-cursor-label="INSCRIBIR"
+                        onClick={() => setSelectedContest(contest)}
+                      >
+                        <MessageCircle
+                          className="h-4 w-4 shrink-0"
+                          aria-hidden="true"
+                        />
+                        <span>Inscribirme</span>
+                      </NeonButton>
+                    )}
                   </div>
                 </article>
               </StaggerItem>
