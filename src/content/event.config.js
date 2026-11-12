@@ -1,12 +1,7 @@
 /**
- * ============================================================================
  * ÚNICA FUENTE DE CONTENIDO — TOKYO STREET 3.ª EDICIÓN
- * ============================================================================
  * Ningún componente debe tener textos, precios, premios, contactos ni horarios
  * hardcodeados. Para actualizar preventas, links, jurados o el cronograma del
- * escenario basta con editar este archivo y desplegar (~1 min en Vercel).
- *
- * Referencia de alcance: doc/propuesta/Propuesta_Tokyo_Street_Actualizada.md
  */
 
 export const EVENT_CONFIG = {
@@ -284,13 +279,52 @@ export const EVENT_CONFIG = {
       doorProcedure:
         "Para la validación en puerta deberás presentar tu comprobante de compra y el DNI informado al momento de la reserva.",
     },
+    // NUEVO PUNTO DE VENTA OFICIAL: CREDIMAS
+    credimas: {
+      badge: "Nuevo Punto de Venta Oficial",
+      partnerName: "CREDIMAS",
+      tagline: "Todo más fácil",
+      highlightPromo: "3 Cuotas sin interés",
+      promoDetail: "¡3 cuotas sin interés con Tarjeta Credimas!",
+      hours: "Lunes a Viernes 08:30 a 13:30 hs · Sábados 09:00 a 13:00 hs",
+      kidsFreeLabel: "Niños de hasta 10 años ingresan GRATIS",
+      branches: [
+        {
+          name: "Casa Central",
+          city: "San Miguel de Tucumán",
+          address: "San Martín 880, SMT",
+          googleMapsUrl:
+            "https://www.google.com/maps/search/?api=1&query=Credimas+San+Martin+880+San+Miguel+de+Tucuman",
+        },
+        {
+          name: "Banda del Río Salí",
+          city: "Banda del Río Salí",
+          address: "Av. San Martín 141",
+          googleMapsUrl:
+            "https://www.google.com/maps/search/?api=1&query=Credimas+Av+San+Martin+141+Banda+del+Rio+Sali",
+        },
+        {
+          name: "Yerba Buena",
+          city: "Yerba Buena",
+          address: "Av. Aconquija 2047",
+          googleMapsUrl:
+            "https://www.google.com/maps/search/?api=1&query=Credimas+Av+Aconquija+2047+Yerba+Buena",
+        },
+        {
+          name: "Tafí Viejo",
+          city: "Tafí Viejo",
+          address: "San Martín 160",
+          googleMapsUrl:
+            "https://www.google.com/maps/search/?api=1&query=Credimas+San+Martin+160+Tafi+Viejo",
+        },
+      ],
+    },
     physical: {
       badge: "Punto de Venta Oficial",
       title: "Entrada física",
       placeName: "Akarumi Yume Manga Café",
       address: "Muñecas 569, San Miguel de Tucumán",
-      // A3: Completar cuando la organización confirme horarios (ej. 'Lunes a sábados de 10:00 a 20:30 hs')
-      hours: "",
+      hours: "Lunes a sábados en horario comercial",
       googleMapsUrl:
         "https://www.google.com/maps/search/?api=1&query=Akarumi+Yume+Manga+Caf%C3%A9+Mu%C3%B1ecas+569+San+Miguel+de+Tucum%C3%A1n",
       ctaMap: "Ver ubicación en Google Maps",
@@ -763,7 +797,6 @@ export const EVENT_CONFIG = {
     ],
     capDisclaimer:
       "Completar los 15 sellos no garantiza por sí solo un premio: la asignación está sujeta al cupo máximo disponible y a las reglas definidas por la organización.",
-    beforeEventBadge: "Activa dom 13/12",
     previewCta: "Ver cómo funciona",
     liveCta: "Abrir mi Pasaporte",
   },
@@ -856,13 +889,13 @@ export const EVENT_CONFIG = {
         id: "entradas-compra",
         question: "¿Cómo compro mi entrada y cuánto cuesta?",
         answer:
-          "La 2.ª preventa tiene un valor de $6.500 ARS. Podés conseguir tu entrada física en Akarumi Yume Manga Café (Muñecas 569) o comunicarte de forma directa por WhatsApp con Sahra Luna (+54 9 381 333-2116), encargada oficial de ventas online de Tokyo Street.",
+          "La 2.ª preventa tiene un valor oficial de $6.500 ARS. Podés comprar tu entrada física en cualquiera de las 4 sucursales de CREDIMAS (San Martín 880 SMT, Av. San Martín 141 Banda del Río Salí, Av. Aconquija 2047 Yerba Buena y San Martín 160 Tafí Viejo) con 3 cuotas sin interés con Tarjeta Credimas; en Akarumi Yume Manga Café (Muñecas 569); o de forma online por WhatsApp con Sahra Luna (+54 9 381 333-2116).",
       },
       {
         id: "menores-gratis",
         question: "¿Los niños pagan entrada?",
         answer:
-          "Los niños de hasta 10 años ingresan gratis acompañados por un adulto responsable, de acuerdo con las condiciones establecidas por la organización.",
+          "¡No! Los niños de hasta 10 años ingresan totalmente GRATIS acompañados por un adulto responsable.",
       },
       {
         id: "concursos-confirmacion",
