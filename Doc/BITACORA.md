@@ -106,3 +106,65 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
   - **Venta de entradas online oficial (`tickets.online`, `TicketsSection.jsx`)**: canal habilitado por WhatsApp directo con **Sahra Luna** (`+54 9 381 333-2116` / `5493813332116`) con mensaje pre-armado oficial para reserva de 2.ª preventa (\$6.500) y chip de contacto en sección.
   - **Concurso de K-Pop integrado al formulario interactivo (`contests.items`, `ContestInscriptionModal.jsx`)**: abandono de canal externo de Instagram; K-Pop ahora abre el modal oficial de inscripción web, valida solista/grupo y tema, y redirecciona automáticamente a WhatsApp con el mensaje estructurado hacia Sahra Luna para confirmación.
   - **Actualización de FAQ (`faq.items`)**: respuesta de compra de entradas actualizada con el canal directo de WhatsApp de Sahra Luna.
+
+---
+
+## [2026-11-09] — Fase 2: Pasaporte Digital, Circuitos QR, Panel de Stand y Panel de Organización
+
+- **Servicios de Integración con Supabase (`passportService.js`, `staffService.js`)**:
+  - `ensureAnonymousSession`: gestión de sesión anónima transparente con persistencia en `localStorage`.
+  - RPCs de asistente (`getMyPassport`, `registerParticipant`, `recoverSession`, `generateNumericCode`, `redeemQrToken`, `getPublicStatus`).
+  - RPCs de feriante (`standGetSummary`, `standGenerateQr`, `standCreditByCode`).
+  - RPCs directivas (`orgGetDashboard`, `orgListStands`, `orgSetStandStatus`, `orgListTokens`, `orgRevokeToken`, `orgListWinners`, `orgVerifyTicket`, `orgMarkDelivered`, `orgUpdateSettings`).
+- **Pasaporte del Asistente (`PassportEntryPage.jsx`, `/pasaporte`)**:
+  - Conexión con Supabase y modo híbrido: si está registrado muestra la libreta oficial en vivo (15 sellos reales, datos de puestos, timestamps de Tucumán y barra de progreso); si no está registrado ofrece el simulador 3D y el banner de activación con DNI en 15 segundos.
+  - `RegisterPassportModal.jsx`: formulario accesible con validación estricta de DNI (7–9 dígitos) y WhatsApp argentino, más pestaña para recuperar sesión desde otro celular (`recover_session`).
+  - `NumericCodeModal.jsx`: generación de PIN temporal de 6 dígitos con cuenta regresiva regresiva y botón de copiado para asistentes cuya cámara no enfoque.
+  - `WinnerTicketModal.jsx`: ticket digital con código verificable (`TS-XXXX-XXXX`), QR para lectura rápida en Mesa de Informes (Stand 70), DNI del titular, posición de ganador (#X de 100) y confeti reactivo.
+- **Ruta de Canje de Sellos por QR Dinámico (`RedeemTokenPage.jsx`, `/s/:token`)**:
+  - Auto-detección del estado del asistente: si no tiene pasaporte activado, resguarda el token en `sessionStorage` y lo guía a activar su cuenta; una vez activada, acredita el sello automáticamente.
+  - Validación atómica contra la DB, mensajes amigables para token expirado, stand repetido o cooldown, y celebración con ráfaga neón de confeti si completó los 15 sellos.
+- **Panel del Feriante (`StandPanelPage.jsx`, `/stand`)**:
+  - Exclusión automática de `TopNavbar` y `SiteFooter` en `AppShell.jsx` para maximizar el área útil en pantallas móviles.
+  - HUD superior compacto para celular con número de puesto, indicador pulsante "EN VIVO" y selector táctil de 3 secciones (QR 75s, PIN Manual, Ventas).
+  - Mostrador de QR Dinámico: visor con miras HUD anime, escáner láser neón animado barriendo el código, rotación automática cada 75 segundos (`stand_generate_qr`) con barra regresiva que advierte en los últimos 10 s, y botón para modo kiosco / pantalla completa.
+  - Acreditación por PIN numérico de 6 dígitos con teclado grande para el pulgar, feedback táctil con `StampConfirmationBurst` y ráfaga de confeti.
+  - Métricas de puesto en tiempo real (sellos otorgados, compradores únicos e historial reciente protegiendo datos personales).
+- **Panel de Organización & Mesa de Informes (`OrgPanelPage.jsx`, `/org`)**:
+  - Exclusión de `TopNavbar` y `SiteFooter` en `AppShell.jsx` para operación 100% focalizada en mesa de informes.
+  - Navegación móvil por solapas táctiles directas (Mesa 70, Control Killswitch, Stands, Ganadores).
+  - Mesa de Canje (Stand 70): verificación rápida con prefijo `TS-`, tarjeta holográfica con DNI gigante sin ofuscar para cotejo en 2 segundos contra documento físico, botón gigante para confirmar entrega en mano con un toque y celebración con confeti.
+  - Interruptor Maestro (Killswitch): apertura, pausa o cierre inmediato con 3 botones táctiles de control maestro.
+  - Catálogo interactivo de 70 puestos adaptado en tarjetas touch para celular (sin tablas anchas) con buscador y botones para pausar/activar al instante.
+  - Auditoría y listado de ganadores ordenado por puesto (#1 a #100).
+- **Mejora Integral UI/UX 100% Responsiva y Modo Demostración Autónomo (Zero-Cost Dev)**:
+  - **Motor Mock Interactivo (`passportService.js`, `staffService.js`)**: permite navegar, interactuar, probar el registro con DNI, el canje de sellos, la rotación del QR de 75 s, el PIN y la verificación en Mesa 70 sin necesidad de proyecto activo en Supabase Cloud hoy (modo puente hasta la contratación del Plan Pro previa al evento).
+  - **Escalabilidad Ergonómica de `HankoStamp.jsx`**: redimensionamiento dinámico (`h-16 w-16 min-[360px]:h-18 sm:h-22`) con tipografía proporcional que garantiza cero overflow o cortes horizontales en celulares ultra compactos (iPhone SE, Galaxy A pequeño, desde 320 px).
+  - **Pestañas y Formularios Táctiles Fluídos (`PassportEntryPage`, `StandPanelPage`, `OrgPanelPage`)**: barras de solapas con desplazamiento suave sin barras visibles (`no-scrollbar`), `touch-action: manipulation` para eliminar retardos de pulsación de 300 ms en navegadores móviles (iOS Safari, Samsung Internet, Android Chrome) y botones de reseteo rápido ("×") en inputs de búsqueda.
+  - **Buscador y Filtro de Estado en Ganadores (`OrgPanelPage.jsx`)**: búsqueda en tiempo real por DNI, nombre o código de ticket, filtros por estado (`Todos`, `Pendientes`, `Entregados`) y botón directo para cargar cualquier ganador en Mesa 70 con 1 toque.
+  - **Accesos Rápidos de Prueba en Stand (`StandPanelPage.jsx`)**: selectores de 1 clic para alternar entre Stand 1 (Manga Café), Stand 4 (K-Pop) y Stand 7 (Ramen).
+  - **Ocultación de Navbar y Footer en `/s/:token` (`AppShell.jsx`)**: la pantalla de escaneo del asistente ahora es 100% limpia sin barras superiores ni inferiores.
+  - **Supresión de badges redundantes**: eliminados los badges en `PortalStatusCard.jsx` y `StandPanelPage.jsx` ("Auto-renovación continua").
+  - **Rediseño natural de `/org` (`OrgPanelPage.jsx`)**: reemplazo de múltiples cards aisladas por una tira unificada de métricas, listas compactas con divisores para los 70 stands y ganadores, y redacción humana y directa para el equipo organizador.
+  - **Paginación y búsqueda multicriterio en Stands (`OrgPanelPage.jsx`)**: paginación reactiva de a 10, 15 o 25 puestos con navegación numérica táctil y buscador en tiempo real por nombre, número de puesto o rubro/categoría.
+
+---
+
+## [2026-11-12] — Incorporación Oficial de CREDIMAS como Nuevo Punto de Venta Físico Multiciudad
+
+- **Punto de Venta Físico Multiciudad y Financiación Regional (`event.config.js`, `TicketsSection.jsx`, `Hero3DStage.jsx`)**:
+  - **Partner Oficial**: Integración destacada de **CREDIMAS — Todo más fácil**.
+  - **Financiación sin interés**: Habilitación de **3 cuotas sin interés con Tarjeta Credimas** en todas sus sucursales oficiales.
+  - **Política Familiar**: Entrada **100% gratuita para niños de hasta 10 años** (inclusive, acompañados por un adulto responsable).
+  - **Precio Oficial Confirmado**: \$6.500 ARS (2.ª Preventa oficial).
+  - **Red de 4 Sucursales Presenciales en Tucumán**:
+    1. _Casa Central_: San Martín 880, San Miguel de Tucumán.
+    2. _Banda del Río Salí_: Av. San Martín 141.
+    3. _Yerba Buena_: Av. Aconquija 2047.
+    4. _Tafí Viejo_: San Martín 160.
+  - **Horarios Unificados de Atención**: Lunes a Viernes de 08:30 a 13:30 hs / Sábados de 09:00 a 13:00 hs.
+- **Actualización Integral de la Experiencia de Usuario (`TicketsSection.jsx`, `Hero3DStage.jsx`, `faq.items`)**:
+  - **Hero 3D**: Sello directo en el talón del boleto 3D indicando venta física en Credimas (4 ciudades) y Akarumi.
+  - **Sección de Entradas (`#entradas`)**: Bloque protagonista de alta jerarquía con insignia fucsia brillante de Credimas, grilla táctil de las 4 sucursales con accesos directos a Google Maps, sello de 3 cuotas sin interés y aviso de pase libre infantil.
+  - **Canales Complementarios**: Coexistencia armónica con la venta online por WhatsApp (Sahra Luna) y el punto friki en Akarumi Yume Manga Café.
+  - **Preguntas Frecuentes (`faq.items`)**: Respuestas actualizadas sobre compra de entradas y menores gratis con todas las opciones presenciales y virtuales.
