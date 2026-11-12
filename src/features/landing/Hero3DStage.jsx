@@ -246,7 +246,7 @@ export function Hero3DStage() {
                       aria-hidden="true"
                     />
                     <span className="truncate">
-                      Física: {tickets.physical.placeName}
+                      Física: Credimas (4 sucursales) & Akarumi
                     </span>
                   </li>
                 </ul>
