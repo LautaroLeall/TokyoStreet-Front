@@ -168,3 +168,22 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
   - **Sección de Entradas (`#entradas`)**: Bloque protagonista de alta jerarquía con insignia fucsia brillante de Credimas, grilla táctil de las 4 sucursales con accesos directos a Google Maps, sello de 3 cuotas sin interés y aviso de pase libre infantil.
   - **Canales Complementarios**: Coexistencia armónica con la venta online por WhatsApp (Sahra Luna) y el punto friki en Akarumi Yume Manga Café.
   - **Preguntas Frecuentes (`faq.items`)**: Respuestas actualizadas sobre compra de entradas y menores gratis con todas las opciones presenciales y virtuales.
+
+---
+
+## [2026-11-13] — Apertura Oficial del Concurso de Dibujo (Temática Libre · $150.000 en Premios)
+
+- **Lanzamiento Oficial del Concurso de Dibujo (`event.config.js`, `ContestsSection.jsx`, `ContestInscriptionModal.jsx`)**:
+  - **Temática**: Libre (abierto a ilustración tradicional, digital, estilos manga/anime, cómic o técnica propia).
+  - **Categorías y Premios**:
+    - **1.º premio**: \$100.000 + Diploma.
+    - **2.º premio**: \$50.000 + Diploma.
+  - **Nivel de Participación**: Abierto e inclusivo para todos los niveles ("No importa si recién empezás o si ya llevás años dibujando").
+  - **Requisito**: Contar con entrada al evento.
+  - **Coordinación y Canal de Inscripción**: Formulario web interactivo conectado directamente con el WhatsApp oficial de **Sahra Luna** (`(381) 333-2116` / `5493813332116`), con respaldo de consultas vía Instagram oficial `@tokyostreet.tuc`.
+- **Actualización de Métricas y Pozo del Festival (`event.config.js`, `index.html`)**:
+  - Pozo total de premios en efectivo del festival actualizado de **\$650.000+** a **\$800.000+** (Hero Stats, cinta electrónica Neón Marquee y Open Graph).
+  - Pestaña del concurso en la Landing con estado abierto (`status: "open"`), botón directo `Inscribirme`, modal interactivo con ícono dinámico `Palette` y mensaje adaptado para firmas/técnicas artísticas.
+- **Créditos de Desarrollo y Dominio Propio Unificado (`event.config.js`, `SiteFooter.jsx`)**:
+  - Actualización de los enlaces de autoría hacia el nuevo dominio propio oficial **`https://lautarolealdev.com`** (que unifica portafolio y servicios profesionales en una sola plataforma).
+  - Enlaces en el footer organizados de forma ergonómica en una línea: **`Lautaro Leal · lautarolealdev.com`** con transiciones neón cian/rosa y etiquetas de cursor dinámicas.

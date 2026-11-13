@@ -7,6 +7,7 @@ import {
   Lock,
   MessageCircle,
   Music,
+  Palette,
   Phone,
   Sparkles,
   User,
@@ -210,7 +211,7 @@ export function ContestInscriptionModal({ contest, onClose }) {
         targetContest
           ? targetContest.status === "closed"
             ? "Cupos completos para esta 3.ª edición"
-            : `Preinscripción vía WhatsApp · Jurado: ${targetContest.jurorDisplay}`
+            : `Preinscripción vía WhatsApp · ${targetContest.jurorPrefix || "Jurado"}: ${targetContest.jurorDisplay}`
           : ""
       }
     >
@@ -489,7 +490,7 @@ export function ContestInscriptionModal({ contest, onClose }) {
                   id="contest-work"
                   label={targetContest.fields.workLabel}
                   required
-                  icon={Music}
+                  icon={targetContest.icon === "palette" ? Palette : Music}
                   error={errors.workDetail}
                   touched={touched.workDetail}
                   isValid={
