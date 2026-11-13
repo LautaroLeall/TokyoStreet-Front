@@ -163,7 +163,7 @@ export const EVENT_CONFIG = {
     ],
     floatingStats: [
       { value: "+70", label: "Stands", jp: "市" },
-      { value: "$650K+", label: "En premios", jp: "賞" },
+      { value: "$800K+", label: "En premios", jp: "賞" },
       { value: "15", label: "Sellos QR", jp: "印" },
     ],
     marqueeItems: [
@@ -172,6 +172,7 @@ export const EVENT_CONFIG = {
       "KIDD.MOI INVITADO",
       "BLOQUES & CONCURSO K-POP",
       "COSPLAY & PASARELA",
+      "CONCURSO DE DIBUJO",
       "+70 STANDS",
       "PASAPORTE 15 SELLOS",
       "CONCURSO DE CANTO",
@@ -343,7 +344,7 @@ export const EVENT_CONFIG = {
     sahraLuna: {
       id: "sahraLuna",
       label: "Sahra Luna",
-      role: "Organización · Ventas & K-Pop",
+      role: "Organización · Entradas, K-Pop & Dibujo",
       phone: "5493813332116",
       displayPhone: "(381) 333-2116",
     },
@@ -505,7 +506,7 @@ export const EVENT_CONFIG = {
     subtitle:
       "Consultá las bases, jurados oficiales, premios en efectivo y canales de inscripción para subir al escenario de Tokyo Street.",
     whatsappDisclaimer:
-      "Las inscripciones de Cosplay se coordinan con Jony Cosplay, y K-Pop con Sahra Luna vía formulario y WhatsApp. Canto cuenta con cupos agotados, y el Concurso de Dibujo abre su convocatoria la próxima semana.",
+      "Las inscripciones de Cosplay se coordinan con Jony Cosplay, y K-Pop y Dibujo con Sahra Luna vía formulario web y WhatsApp oficial. Canto cuenta con cupos agotados.",
     items: [
       {
         id: "canto",
@@ -651,36 +652,35 @@ export const EVENT_CONFIG = {
         id: "dibujo",
         icon: "palette",
         title: "Concurso de Dibujo",
-        badge: "Próximamente",
-        status: "upcoming",
-        upcoming: true,
+        badge: "Temática libre · Ilustración",
+        status: "open",
         prizes: [
-          { place: "Convocatoria", reward: "Abre la semana que viene" },
-          {
-            place: "Bases y premios",
-            reward: "Próximamente en @tokyostreet.tuc",
-          },
+          { place: "1.º lugar", reward: "$100.000 + Diploma" },
+          { place: "2.º lugar", reward: "$50.000 + Diploma" },
         ],
         minAge: null,
         minAgeError: "",
         requirements: [
-          "Apertura oficial de bases e inscripciones la próxima semana.",
-          "Espacio exclusivo para ilustradores, artistas y dibujantes.",
-          "Seguí a @tokyostreet.tuc en Instagram para la convocatoria.",
+          "Temática libre · ¡Demostrá tu talento, técnica y creatividad!",
+          "No importa si recién empezás o si ya llevás años dibujando.",
+          "Inscripción coordinada por WhatsApp con Sahra Luna.",
+          "Para participar es obligatorio contar con entrada al evento.",
         ],
-        jurorContacts: [],
-        jurorDisplay: "Organización Tokyo Street",
+        jurorContacts: ["sahraLuna"],
+        jurorPrefix: "Coordina",
+        jurorDisplay: "Sahra Luna",
         jurorInstagram: {
           handle: "@tokyostreet.tuc",
           url: "https://www.instagram.com/tokyostreet.tuc/",
         },
         jurorAvatars: [],
         fields: {
-          stageNameLabel: "Nombre o seudónimo del artista",
-          stageNamePlaceholder: "Ej. @tu_firma / Nombre",
+          stageNameLabel: "Nombre artístico o firma",
+          stageNamePlaceholder: "Ej. @tu_firma / Nombre y apellido",
           stageNameRequired: true,
-          workLabel: "Técnica u obra",
-          workPlaceholder: "Ej. Ilustración tradicional / digital",
+          workLabel: "Técnica, estilo o propuesta a presentar",
+          workPlaceholder:
+            "Ej. Ilustración tradicional (tinta/color) / Digital / Boceto",
         },
       },
     ],
@@ -982,8 +982,9 @@ export const EVENT_CONFIG = {
   credits: {
     developerName: "Lautaro Leal Del Prete",
     developerRole: "Plataforma desarrollada por Lautaro Leal Del Prete",
-    portfolioUrl: "https://portafolio-lldp.vercel.app/",
-    servicesUrl: "https://servicios-lldp.vercel.app/",
+    portfolioUrl: "https://lautarolealdev.com",
+    servicesUrl: "https://lautarolealdev.com",
+    domain: "lautarolealdev.com",
     organizationName: "Organización Tokyo Street (Sahra Luna & Martín Muñoz)",
   },
 };
