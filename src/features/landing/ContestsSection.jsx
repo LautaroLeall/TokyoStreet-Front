@@ -110,7 +110,7 @@ export function ContestsSection() {
                         )}
 
                         <span className="whitespace-nowrap">
-                          Jurado:{" "}
+                          {contest.jurorPrefix || "Jurado"}:{" "}
                           <strong className="text-white">
                             {contest.jurorDisplay}
                           </strong>
