@@ -202,7 +202,10 @@ export function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               data-cursor-label="WEB"
-              title={credits.platformLabel || "Portafolio & Servicios — lautarolealdev.com"}
+              title={
+                credits.platformLabel ||
+                "Portafolio & Servicios — lautarolealdev.com"
+              }
               className="font-mono text-[11px] text-pink-400 transition hover:text-pink-300"
             >
               {credits.domain || "lautarolealdev.com"}
