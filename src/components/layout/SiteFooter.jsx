@@ -189,20 +189,26 @@ export function SiteFooter() {
               href={credits.portfolioUrl}
               target="_blank"
               rel="noopener noreferrer"
+              data-cursor-label="DEV"
               className="font-semibold text-lilac-200 transition hover:text-cyan-300"
             >
-              LLDP
+              Lautaro Leal
             </a>
             <span className="text-white/20" aria-hidden="true">
               ·
             </span>
             <a
-              href={credits.servicesUrl}
+              href={credits.portfolioUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-lilac-200 transition hover:text-pink-400"
+              data-cursor-label="WEB"
+              title={
+                credits.platformLabel ||
+                "Portafolio & Servicios — lautarolealdev.com"
+              }
+              className="font-mono text-[11px] text-pink-400 transition hover:text-pink-300"
             >
-              Servicios
+              {credits.domain || "lautarolealdev.com"}
             </a>
           </p>
         </div>

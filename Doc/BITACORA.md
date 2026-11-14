@@ -184,6 +184,11 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
 - **Actualización de Métricas y Pozo del Festival (`event.config.js`, `index.html`)**:
   - Pozo total de premios en efectivo del festival actualizado de **\$650.000+** a **\$800.000+** (Hero Stats, cinta electrónica Neón Marquee y Open Graph).
   - Pestaña del concurso en la Landing con estado abierto (`status: "open"`), botón directo `Inscribirme`, modal interactivo con ícono dinámico `Palette` y mensaje adaptado para firmas/técnicas artísticas.
+
+---
+
+## [2026-11-14] — Unificación de Marca Personal y Dominio Oficial (lautarolealdev.com)
+
 - **Créditos de Desarrollo y Dominio Propio Unificado (`event.config.js`, `SiteFooter.jsx`)**:
-  - Actualización de los enlaces de autoría hacia el nuevo dominio propio oficial **`https://lautarolealdev.com`** (que unifica portafolio y servicios profesionales en una sola plataforma).
-  - Enlaces en el footer organizados de forma ergonómica en una línea: **`Lautaro Leal · lautarolealdev.com`** con transiciones neón cian/rosa y etiquetas de cursor dinámicas.
+  - Unificación de los servicios profesionales y portafolio de Lautaro Leal bajo el nuevo dominio oficial propio **`https://lautarolealdev.com`**.
+  - Footer oficial actualizado con link dual minimalista en una sola línea: **`Lautaro Leal · lautarolealdev.com`** con transiciones neón cian/rosa, accesibilidad y etiquetas dinámicas de cursor (`DEV` y `WEB`).
