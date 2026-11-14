@@ -985,6 +985,7 @@ export const EVENT_CONFIG = {
     portfolioUrl: "https://lautarolealdev.com",
     servicesUrl: "https://lautarolealdev.com",
     domain: "lautarolealdev.com",
+    platformLabel: "Portafolio & Servicios — lautarolealdev.com",
     organizationName: "Organización Tokyo Street (Sahra Luna & Martín Muñoz)",
   },
 };
