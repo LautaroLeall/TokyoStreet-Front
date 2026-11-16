@@ -81,34 +81,30 @@ export function formatStandInquiryMessage({
   const lines = [
     `Hola, quiero consultar disponibilidad de stand para *Tokyo Street (${editionLabel})*.`,
     "",
-    `🏪 *Emprendimiento:* ${normalizeSpaces(brandName)}`,
-    `🏷️ *Rubro:* ${rubroLine}`,
-    `👤 *Responsable:* ${normalizeSpaces(contactName)}`,
-    `📱 *WhatsApp:* ${formatArPhoneDisplay(whatsapp)}`,
+    `• *Emprendimiento:* ${normalizeSpaces(brandName)}`,
+    `• *Rubro:* ${rubroLine}`,
+    `• *Responsable:* ${normalizeSpaces(contactName)}`,
+    `• *WhatsApp:* ${formatArPhoneDisplay(whatsapp)}`,
   ];
 
   if (cleanIg) {
-    lines.push(`📸 *Instagram:* ${cleanIg}`);
+    lines.push(`• *Instagram:* ${cleanIg}`);
   }
 
   if (normalizeSpaces(spacePreference)) {
-    lines.push(`📐 *Espacio solicitado:* ${normalizeSpaces(spacePreference)}`);
+    lines.push(`• *Espacio solicitado:* ${normalizeSpaces(spacePreference)}`);
   }
 
   if (normalizeSpaces(experience)) {
-    lines.push(`✨ *Historial:* ${normalizeSpaces(experience)}`);
+    lines.push(`• *Historial:* ${normalizeSpaces(experience)}`);
   }
 
   if (Array.isArray(extras) && extras.length > 0) {
-    lines.push(`⚡ *Opciones operativas:* ${extras.join(", ")}`);
+    lines.push(`• *Opciones operativas:* ${extras.join(", ")}`);
   }
 
   if (normalizeSpaces(description)) {
-    lines.push(
-      "",
-      `📦 *Propuesta de productos:*`,
-      normalizeSpaces(description),
-    );
+    lines.push("", `• *Propuesta de productos:*`, normalizeSpaces(description));
   }
 
   lines.push(
