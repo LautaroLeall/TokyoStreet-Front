@@ -4,7 +4,7 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 /**
  * Campo de formulario interactivo con validación visual en tiempo real:
  * - Ícono contextual izquierdo
- * - Indicador derecho en vivo (✓ verde al ser válido, ! rojo si tiene error)
+ * - Indicador derecho en vivo (icono Check verde al ser válido, alerta roja si tiene error)
  * - Contador de caracteres opcional en 1 sola línea
  * - Fuente 16px para evitar auto-zoom en iOS Safari
  */
