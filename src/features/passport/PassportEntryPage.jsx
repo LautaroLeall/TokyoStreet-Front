@@ -1,87 +1,186 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { QRCodeSVG } from "qrcode.react";
 import {
   ArrowLeft,
   Calendar,
-  Clock,
-  KeyRound,
+  CheckCircle2,
+  ExternalLink,
   QrCode,
-  RotateCcw,
   ScrollText,
   Shield,
   ShieldCheck,
-  Sparkles,
-  Stamp,
-  Trophy,
+  UserCheck,
 } from "lucide-react";
 import { EVENT_CONFIG } from "@/content/event.config";
-import { HankoStamp } from "@/components/ui/HankoStamp";
-import { HexBadge } from "@/components/ui/HexBadge";
 import { NeonButton } from "@/components/ui/NeonButton";
-import {
-  RevealBlock,
-  StaggerGrid,
-  StaggerItem,
-} from "@/components/ui/RevealMotion";
-import { Tilt3DCard } from "@/components/ui/Tilt3DCard";
+import { RevealBlock } from "@/components/ui/RevealMotion";
 import { useEventClock } from "@/hooks/useEventClock";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { usePassportSimulator } from "@/hooks/usePassportSimulator";
+import { confettiBurst } from "@/lib/confettiBurst";
 import { formatCountdownUnits } from "@/lib/time";
-
-const VIEW_TABS = [
-  { id: "simulador", label: "01 · Probar Libreta 3D" },
-  { id: "guia", label: "02 · Cómo se juega el 13/12" },
-];
+import {
+  detectInAppBrowser,
+  getMyPassport,
+  redeemQrToken,
+} from "@/services/passportService";
+import { NumericCodeModal } from "./components/NumericCodeModal";
+import { PassportLiveBookTab } from "./components/PassportLiveBookTab";
+import {
+  PassportGuideTab,
+  PassportSimulatorTab,
+} from "./components/PassportSimulatorAndGuideTabs";
+import { RegisterPassportModal } from "./components/RegisterPassportModal";
+import { WinnerTicketModal } from "./components/WinnerTicketModal";
 
 export default function PassportEntryPage() {
   const { brand, event, passportTeaser } = EVENT_CONFIG;
   const prefersReduced = useReducedMotion();
   const timing = useEventClock(event.startIso, event.endIso);
-  const [activeTab, setActiveTab] = useState("simulador");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const inAppInfo = detectInAppBrowser();
+
+  const [passportData, setPassportData] = useState(null);
+  const [loadingPassport, setLoadingPassport] = useState(true);
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [codeModalOpen, setCodeModalOpen] = useState(false);
+  const [winnerModalOpen, setWinnerModalOpen] = useState(false);
+  const [actionNotice, setActionNotice] = useState(null);
+
+  const isRegistered = Boolean(passportData?.ok && passportData?.participant);
+  const [activeTab, setActiveTab] = useState(
+    isRegistered ? "real" : "simulador",
+  );
 
   usePageMeta({
     title: "Pasaporte QR 15 Sellos · Tokyo Street — 3.ª Edición",
     description:
-      "Probá en vivo el simulador 3D del Pasaporte Tokyo Street de 15 sellos digitales por QR y conocé cómo participar el domingo 13 de diciembre.",
+      "Acreditá tus 15 sellos digitales por código QR dinámico en Tokyo Street el domingo 13 de diciembre y ganá premios exclusivos.",
     path: "/pasaporte",
   });
 
-  const {
-    stands,
-    stamped,
-    count,
-    target,
-    isCompleted,
-    progressPercent,
-    toggleStamp,
-    stampNext,
-    completeAll,
-    resetStamps,
-  } = usePassportSimulator({
+  const refreshPassport = useCallback(async () => {
+    setLoadingPassport(true);
+    try {
+      const data = await getMyPassport();
+      if (data?.ok && data?.participant) {
+        setPassportData(data);
+        setActiveTab("real");
+        if (data?.progress?.is_winner && data?.winner) {
+          const alreadySeen = sessionStorage.getItem("ts_winner_celebrated");
+          if (!alreadySeen) {
+            confettiBurst();
+            sessionStorage.setItem("ts_winner_celebrated", "true");
+          }
+        }
+      } else {
+        setPassportData(null);
+      }
+    } catch {
+      setPassportData(null);
+    } finally {
+      setLoadingPassport(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshPassport();
+  }, [refreshPassport]);
+
+  useEffect(() => {
+    if (
+      searchParams.get("pending") === "1" &&
+      !isRegistered &&
+      !loadingPassport
+    ) {
+      setRegisterModalOpen(true);
+    }
+  }, [searchParams, isRegistered, loadingPassport]);
+
+  const handleRegistrationSuccess = async (data) => {
+    setPassportData(data);
+    setActiveTab("real");
+
+    const pendingToken = sessionStorage.getItem("ts_pending_token");
+    if (pendingToken) {
+      sessionStorage.removeItem("ts_pending_token");
+      setActionNotice({
+        type: "warn",
+        text: "Acreditando el sello escaneado...",
+      });
+
+      try {
+        const redeemRes = await redeemQrToken(pendingToken);
+        if (redeemRes.ok) {
+          setActionNotice({
+            type: "ok",
+            text: `¡Sello acreditado en ${redeemRes.stamp?.stand_name || "el stand"}!`,
+          });
+          confettiBurst();
+          await refreshPassport();
+        } else {
+          setActionNotice({
+            type: "warn",
+            text:
+              redeemRes.message ||
+              "No se pudo acreditar el sello pendiente. Escanealo nuevamente.",
+          });
+        }
+      } catch {
+        setActionNotice({
+          type: "warn",
+          text: "Error al acreditar sello pendiente.",
+        });
+      }
+    } else {
+      setActionNotice({
+        type: "ok",
+        text: "¡Pasaporte activado con éxito! Ya podés sellar en los stands.",
+      });
+    }
+
+    if (searchParams.get("pending")) {
+      searchParams.delete("pending");
+      setSearchParams(searchParams, { replace: true });
+    }
+  };
+
+  const simulator = usePassportSimulator({
     target: passportTeaser.stampsTarget,
     initialStamped: [1, 2, 3],
   });
 
   const countdownUnits = formatCountdownUnits(timing);
 
+  const viewTabs = isRegistered
+    ? [
+        { id: "real", label: "01 · Mi Libreta Oficial (En Vivo)" },
+        { id: "simulador", label: "02 · Simulador de Prueba" },
+        { id: "guia", label: "03 · Cómo se juega" },
+      ]
+    : [
+        { id: "simulador", label: "01 · Probar Simulador 3D" },
+        { id: "guia", label: "02 · Cómo se juega el 13/12" },
+      ];
+
+  const stampsTarget = passportData?.progress?.target || 15;
+  const stampsCount = passportData?.progress?.count || 0;
+  const isRealWinner = Boolean(passportData?.progress?.is_winner);
+  const realPercent = Math.min(
+    100,
+    Math.round((stampsCount / stampsTarget) * 100),
+  );
+
   return (
     <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-9 sm:px-6 sm:py-13">
-      {/* Barra superior en 1 sola línea */}
       <RevealBlock className="flex items-center justify-between gap-3">
         <NeonButton as={Link} to="/" variant="ghost" size="md">
           <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span>Volver al inicio</span>
         </NeonButton>
-
-        <HexBadge tone={timing.phase === "live" ? "ok" : "warn"} icon={Clock}>
-          {timing.phase === "live" ? "Juego activo" : "En pausa · Activa 13/12"}
-        </HexBadge>
       </RevealBlock>
 
-      {/* Cabecera abierta sin tarjeta pesada ni cajitas de contador */}
       <RevealBlock
         delay={0.04}
         className="mt-8 border-b border-cyan-300/20 pb-8"
@@ -114,13 +213,9 @@ export default function PassportEntryPage() {
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-lilac-200 sm:text-base">
-              El registro oficial y el escaneo de códigos QR en los puestos se
-              habilitan el{" "}
-              <strong className="text-cyan-300">
-                {event.shortDateLabel} ({event.hoursLabel})
-              </strong>
-              . Abajo podés probar en vivo cómo funciona tu libreta 3D
-              interactiva.
+              Comprá en los puestos feriantes, escaneá sus códigos QR dinámicos
+              de 75 segundos y completá 15 sellos para canjear tu premio oficial
+              de Tokyo Street.
             </p>
 
             <p className="mt-3 inline-flex items-center gap-2 whitespace-nowrap font-mono text-xs text-lilac-300">
@@ -183,14 +278,93 @@ export default function PassportEntryPage() {
         </div>
       </RevealBlock>
 
-      {/* Pestañas con línea láser inferior */}
-      <RevealBlock delay={0.06} className="mt-6">
+      {inAppInfo.isInApp ? (
+        <RevealBlock delay={0.04} className="mt-5">
+          <div className="rounded-xl border border-warn/40 bg-warn/10 p-4 text-xs text-lilac-100">
+            <div className="flex items-center gap-2 font-semibold text-warn">
+              <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>
+                Estás viendo el Pasaporte dentro de{" "}
+                {inAppInfo.appName || "una red social"}
+              </span>
+            </div>
+            <p className="mt-1 leading-relaxed text-lilac-200">
+              Para que tu sesión quede guardada cuando escanees códigos QR con
+              la cámara del teléfono, tocá el menú superior derecho y elegí{" "}
+              <strong>
+                &ldquo;Abrir en {inAppInfo.isIOS ? "Safari" : "Chrome"}&rdquo;
+              </strong>
+              .
+            </p>
+          </div>
+        </RevealBlock>
+      ) : null}
+
+      {actionNotice ? (
+        <RevealBlock delay={0.05} className="mt-6">
+          <div
+            className={`flex items-center justify-between gap-3 rounded-lg border p-4 text-xs font-semibold ${
+              actionNotice.type === "ok"
+                ? "border-ok/60 bg-ok/10 text-ok"
+                : "border-warn/60 bg-warn/10 text-warn"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>{actionNotice.text}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActionNotice(null)}
+              className="font-mono text-xs uppercase underline hover:opacity-80"
+            >
+              Cerrar
+            </button>
+          </div>
+        </RevealBlock>
+      ) : null}
+
+      {!isRegistered && !loadingPassport ? (
+        <RevealBlock delay={0.06} className="mt-6">
+          <div className="flex flex-col items-start justify-between gap-4 rounded-xl border border-cyan-300/30 bg-navy-950/80 p-5 backdrop-blur-sm sm:flex-row sm:items-center sm:p-6">
+            <div className="flex items-start gap-3.5">
+              <UserCheck
+                className="mt-1 h-5 w-5 shrink-0 text-cyan-300"
+                aria-hidden="true"
+              />
+              <div>
+                <h3 className="font-display text-base uppercase tracking-wide text-white sm:text-lg">
+                  ¿Participás en Tokyo Street? Activá tu Pasaporte Oficial
+                </h3>
+                <p className="mt-1 max-w-xl text-xs leading-relaxed text-lilac-200 sm:text-sm">
+                  Vinculá tu DNI en 15 segundos sin contraseña para que cada
+                  sello escaneado quede guardado a tu nombre.
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full shrink-0 sm:w-auto">
+              <NeonButton
+                type="button"
+                variant="primary"
+                size="md"
+                fullWidth
+                onClick={() => setRegisterModalOpen(true)}
+              >
+                <span>Activar con DNI</span>
+              </NeonButton>
+            </div>
+          </div>
+        </RevealBlock>
+      ) : null}
+
+      <RevealBlock delay={0.08} className="mt-6">
         <div
           role="tablist"
           aria-label="Secciones del Pasaporte"
-          className="inline-flex gap-6 border-b border-cyan-300/20"
+          className="flex w-full items-center gap-4 overflow-x-auto border-b border-cyan-300/20 pb-1 no-scrollbar sm:gap-6"
         >
-          {VIEW_TABS.map((tab) => {
+          {viewTabs.map((tab) => {
             const selected = activeTab === tab.id;
             return (
               <button
@@ -199,7 +373,7 @@ export default function PassportEntryPage() {
                 role="tab"
                 aria-selected={selected}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative min-h-[42px] whitespace-nowrap pb-2.5 font-mono text-xs font-bold uppercase tracking-wider transition-colors sm:text-sm ${
+                className={`relative shrink-0 min-h-[42px] whitespace-nowrap pb-2.5 font-mono text-xs font-bold uppercase tracking-wider transition-colors sm:text-sm ${
                   selected ? "text-white" : "text-lilac-400 hover:text-cyan-300"
                 }`}
               >
@@ -218,10 +392,28 @@ export default function PassportEntryPage() {
         </div>
       </RevealBlock>
 
-      {/* Contenido dinámico */}
       <div className="mt-8">
         <AnimatePresence mode="wait" initial={false}>
-          {activeTab === "simulador" ? (
+          {activeTab === "real" && isRegistered ? (
+            <motion.div
+              key="tab-real"
+              initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <PassportLiveBookTab
+                passportData={passportData}
+                stampsCount={stampsCount}
+                stampsTarget={stampsTarget}
+                realPercent={realPercent}
+                isRealWinner={isRealWinner}
+                onOpenCodeModal={() => setCodeModalOpen(true)}
+                onOpenWinnerModal={() => setWinnerModalOpen(true)}
+                onRefreshPassport={refreshPassport}
+              />
+            </motion.div>
+          ) : activeTab === "simulador" ? (
             <motion.div
               key="tab-simulador"
               initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 16 }}
@@ -229,176 +421,11 @@ export default function PassportEntryPage() {
               exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Tilt3DCard
-                variant="cyan"
-                intensity={4}
-                glareColor="rgba(132, 240, 252, 0.15)"
-                className="p-5 sm:p-7"
-              >
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 whitespace-nowrap">
-                      <Stamp
-                        className="h-4 w-4 shrink-0 text-pink-400"
-                        aria-hidden="true"
-                      />
-                      <span className="font-display text-sm uppercase tracking-wider text-white sm:text-base">
-                        Libreta Oficial · Simulador 3D
-                      </span>
-                    </div>
-                    <span className="whitespace-nowrap font-mono text-xs font-bold text-cyan-300">
-                      {count} / {target} sellos
-                    </span>
-                  </div>
-
-                  <div className="mt-3 h-2 w-full overflow-hidden rounded-pill bg-navy-950">
-                    <motion.div
-                      initial={false}
-                      animate={{ width: `${progressPercent}%` }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 250,
-                        damping: 25,
-                      }}
-                      className="h-full rounded-pill bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 shadow-glow-pink-sm"
-                    />
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="text-lilac-300">
-                      Tocá cualquier casillero para estampar o quitar un sello
-                      japonés:
-                    </span>
-                    <div className="flex flex-wrap items-center gap-2">
-                      {!isCompleted ? (
-                        <>
-                          <button
-                            type="button"
-                            data-cursor-label="SELLAR +1"
-                            onClick={stampNext}
-                            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill border border-pink-400/55 bg-pink-600 px-3 py-1.5 font-semibold text-white shadow-glow-pink-sm transition hover:bg-pink-500"
-                          >
-                            <Sparkles
-                              className="h-3.5 w-3.5"
-                              aria-hidden="true"
-                            />
-                            <span>Estampar +1</span>
-                          </button>
-                          <button
-                            type="button"
-                            data-cursor-label="15 / 15"
-                            onClick={completeAll}
-                            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill border border-cyan-300/45 bg-navy-950 px-3 py-1.5 font-semibold text-cyan-300 transition hover:border-cyan-300 hover:bg-navy-800"
-                          >
-                            <Trophy
-                              className="h-3.5 w-3.5 text-warn"
-                              aria-hidden="true"
-                            />
-                            <span>Simular 15/15</span>
-                          </button>
-                        </>
-                      ) : null}
-                      {count > 0 ? (
-                        <button
-                          type="button"
-                          onClick={() => resetStamps(false)}
-                          className="inline-flex items-center gap-1 whitespace-nowrap rounded-pill border border-white/15 bg-navy-950/90 px-3 py-1.5 font-semibold text-lilac-300 transition hover:border-cyan-300/50 hover:text-white"
-                        >
-                          <RotateCcw
-                            className="h-3.5 w-3.5"
-                            aria-hidden="true"
-                          />
-                          <span>Vaciar grilla</span>
-                        </button>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  {/* Grilla de 15 sellos Hanko */}
-                  <div className="mt-5 grid grid-cols-3 place-items-center gap-3 border-y border-white/10 py-6 sm:grid-cols-5 sm:gap-4">
-                    {Array.from({ length: target }, (_, idx) => {
-                      const slot = idx + 1;
-                      const stand = stands[idx];
-                      return (
-                        <HankoStamp
-                          key={slot}
-                          index={slot}
-                          filled={stamped.includes(slot)}
-                          standNumber={stand?.num}
-                          standName={stand?.name}
-                          interactive
-                          onToggle={toggleStamp}
-                        />
-                      );
-                    })}
-                  </div>
-
-                  {/* Ticket Ganador Holográfico de Demostración */}
-                  <AnimatePresence initial={false}>
-                    {isCompleted ? (
-                      <motion.div
-                        key="demo-ticket-reveal"
-                        initial={
-                          prefersReduced
-                            ? { opacity: 1 }
-                            : { opacity: 0, height: 0, scale: 0.94 }
-                        }
-                        animate={{ opacity: 1, height: "auto", scale: 1 }}
-                        exit={
-                          prefersReduced
-                            ? { opacity: 0 }
-                            : { opacity: 0, height: 0, scale: 0.94 }
-                        }
-                        transition={{
-                          duration: 0.3,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="overflow-hidden"
-                      >
-                        <div className="ticket-notches mt-5 flex flex-col items-center justify-between gap-4 rounded-lg border border-ok/60 bg-gradient-to-r from-navy-950 via-ok/15 to-navy-950 p-5 sm:flex-row">
-                          <div className="text-center sm:text-left">
-                            <div className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[11px] font-bold uppercase text-ok">
-                              <Trophy
-                                className="h-3.5 w-3.5 text-warn"
-                                aria-hidden="true"
-                              />
-                              <span>VISTA PREVIA · MODO SIMULACIÓN</span>
-                            </div>
-                            <h2 className="mt-1.5 font-display text-lg uppercase tracking-wide text-white sm:text-xl">
-                              ¡Así luce el Ticket Ganador Digital!
-                            </h2>
-                            <p className="mt-1 text-xs leading-relaxed text-lilac-200">
-                              El domingo 13/12, si completás 15 stands reales
-                              mientras haya cupo disponible, recibirás un código
-                              único verificable junto a tu DNI físico.
-                            </p>
-                          </div>
-
-                          <div className="flex shrink-0 flex-col items-center rounded-md border border-cyan-300/35 bg-white p-2.5 shadow-glow-cyan-sm">
-                            <QRCodeSVG
-                              value="TOKYO-STREET-3-MODO-SIMULACION"
-                              size={84}
-                              bgColor="#FFFFFF"
-                              fgColor="#0C0030"
-                              level="M"
-                            />
-                            <span className="mt-1 font-mono text-[10px] font-bold text-navy-950">
-                              DEMO-15/15
-                            </span>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ) : null}
-                  </AnimatePresence>
-                </div>
-
-                <div className="mt-6">
-                  <NeonButton variant="primary" size="xl" fullWidth disabled>
-                    <QrCode className="h-5 w-5 shrink-0" aria-hidden="true" />
-                    <span>Escanear QR real (13/12 · 13:00 hs)</span>
-                  </NeonButton>
-                </div>
-              </Tilt3DCard>
+              <PassportSimulatorTab
+                simulator={simulator}
+                isRegistered={isRegistered}
+                onOpenRegisterModal={() => setRegisterModalOpen(true)}
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -408,55 +435,12 @@ export default function PassportEntryPage() {
               exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -12 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
-              <StaggerGrid className="divide-y divide-cyan-300/20 border-y border-cyan-300/20">
-                {passportTeaser.steps.map((item) => (
-                  <StaggerItem key={item.step}>
-                    <div className="grid grid-cols-1 gap-3 py-6 sm:grid-cols-12 sm:items-baseline sm:gap-6">
-                      <div className="flex items-baseline gap-3 sm:col-span-5">
-                        <span className="text-stroke-pink font-display text-3xl leading-none">
-                          {item.step}
-                        </span>
-                        <h2 className="font-display text-lg uppercase tracking-wide text-white">
-                          {item.title}
-                        </h2>
-                      </div>
-                      <p className="text-sm leading-relaxed text-lilac-200 sm:col-span-7 sm:text-base">
-                        {item.description}
-                      </p>
-                    </div>
-                  </StaggerItem>
-                ))}
-
-                <StaggerItem>
-                  <div className="flex flex-col items-start justify-between gap-4 py-7 sm:flex-row sm:items-center">
-                    <div className="flex items-start gap-3.5">
-                      <KeyRound
-                        className="mt-1 h-5 w-5 shrink-0 text-cyan-300"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <h3 className="font-display text-base uppercase tracking-wide text-white sm:text-lg">
-                          ¿Tu cámara no enfoca el QR? Respaldo numérico incluido
-                        </h3>
-                        <p className="mt-1 max-w-xl text-sm leading-relaxed text-lilac-200">
-                          El día del evento podrás generar un código temporal de
-                          6 dígitos desde tu pantalla para que el feriante
-                          acredite tu compra sin usar la cámara.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="shrink-0 whitespace-nowrap border-b-2 border-cyan-300 pb-1 font-mono text-2xl font-bold tracking-[0.22em] text-cyan-300">
-                      482·915
-                    </div>
-                  </div>
-                </StaggerItem>
-              </StaggerGrid>
+              <PassportGuideTab steps={passportTeaser.steps} />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Nota abierta de cupo + enlaces legales */}
       <RevealBlock delay={0.1} className="mt-8 space-y-5">
         <div className="flex items-start gap-3 border-l-2 border-warn pl-4 text-xs leading-relaxed text-lilac-200">
           <ShieldCheck
@@ -477,6 +461,24 @@ export default function PassportEntryPage() {
           </NeonButton>
         </div>
       </RevealBlock>
+
+      <RegisterPassportModal
+        open={registerModalOpen}
+        onClose={() => setRegisterModalOpen(false)}
+        onSuccess={handleRegistrationSuccess}
+      />
+
+      <NumericCodeModal
+        open={codeModalOpen}
+        onClose={() => setCodeModalOpen(false)}
+      />
+
+      <WinnerTicketModal
+        open={winnerModalOpen}
+        onClose={() => setWinnerModalOpen(false)}
+        winner={passportData?.winner}
+        participant={passportData?.participant}
+      />
     </main>
   );
 }
