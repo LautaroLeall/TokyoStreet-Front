@@ -1,4 +1,3 @@
-import { HexBadge } from "@/components/ui/HexBadge";
 import { RevealBlock } from "@/components/ui/RevealMotion";
 import { Tilt3DCard } from "@/components/ui/Tilt3DCard";
 
@@ -21,14 +20,11 @@ const TONE_STYLES = {
 };
 
 /**
- * Vista centrada reutilizable para los módulos operativos de Entrega 2
- * (/s/:token, /stand y /org), eliminando código repetido entre paneles.
+ * Vista centrada para los módulos operativos (/s/:token, /stand y /org).
  */
 export function PortalStatusCard({
   tone = "cyan",
   icon: Icon,
-  badgeLabel,
-  badgeIcon,
   title,
   description,
   extraContent = null,
@@ -55,12 +51,6 @@ export function PortalStatusCard({
               >
                 {Icon ? <Icon className="h-6 w-6" aria-hidden="true" /> : null}
               </span>
-            </div>
-
-            <div className="mt-4 flex justify-center">
-              <HexBadge tone={tone} icon={badgeIcon}>
-                {badgeLabel}
-              </HexBadge>
             </div>
 
             <h1 className="mt-4 font-display text-xl uppercase tracking-wide text-white sm:text-2xl">
