@@ -216,7 +216,6 @@ export function StandStepSpace({
 
   return (
     <div className="space-y-5">
-      {/* Grilla visual de los 9 rubros oficiales */}
       <div>
         <div className="flex items-center justify-between gap-2">
           <span
@@ -229,8 +228,9 @@ export function StandStepSpace({
             </span>
           </span>
           {form.category ? (
-            <span className="whitespace-nowrap font-mono text-[11px] font-semibold text-ok">
-              ✓ {form.category}
+            <span className="inline-flex items-center gap-1 whitespace-nowrap font-mono text-[11px] font-semibold text-ok">
+              <Check className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>{form.category}</span>
             </span>
           ) : null}
         </div>
@@ -270,9 +270,7 @@ export function StandStepSpace({
                   />
                 ) : null}
                 <CatIcon
-                  className={`relative z-[1] h-4 w-4 shrink-0 ${
-                    selected ? "text-white" : "text-cyan-300"
-                  }`}
+                  className={`relative z-[1] h-4 w-4 shrink-0 ${selected ? "text-white" : "text-cyan-300"}`}
                   aria-hidden="true"
                 />
                 <span className="relative z-[1] truncate whitespace-nowrap">
@@ -290,7 +288,6 @@ export function StandStepSpace({
         ) : null}
       </div>
 
-      {/* Rubro secundario opcional para stands mixtos */}
       {form.category ? (
         <div>
           <span className="block whitespace-nowrap text-xs font-semibold text-lilac-200">
@@ -308,13 +305,18 @@ export function StandStepSpace({
                     onClick={() =>
                       onFieldChange("secondaryCategory", active ? "" : sec)
                     }
-                    className={`whitespace-nowrap rounded-pill border px-3 py-1 text-xs font-semibold transition ${
+                    className={`inline-flex items-center gap-1 whitespace-nowrap rounded-pill border px-3 py-1 text-xs font-semibold transition ${
                       active
                         ? "border-cyan-300 bg-cyan-400/20 text-cyan-300"
                         : "border-white/10 bg-navy-950/75 text-lilac-300 hover:border-cyan-300/40 hover:text-white"
                     }`}
                   >
-                    {active ? `✓ ${sec}` : `+ ${sec}`}
+                    {active ? (
+                      <Check className="h-3 w-3" aria-hidden="true" />
+                    ) : (
+                      <Plus className="h-3 w-3" aria-hidden="true" />
+                    )}
+                    <span>{sec}</span>
                   </button>
                 );
               })}
@@ -322,7 +324,6 @@ export function StandStepSpace({
         </div>
       ) : null}
 
-      {/* Formato de espacio */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <span className="block whitespace-nowrap text-xs font-semibold text-white sm:text-sm">
@@ -357,7 +358,6 @@ export function StandStepSpace({
           </div>
         </div>
 
-        {/* Experiencia previa y opciones técnicas */}
         <div className="space-y-4">
           <div>
             <span className="block whitespace-nowrap text-xs font-semibold text-white sm:text-sm">
@@ -440,17 +440,21 @@ export function StandStepProposal({
   const suggestions = standsCall.categorySuggestions?.[form.category] || [];
   const charLen = form.description.trim().length;
 
-  let qualityBadge = { text: "Mínimo 20 caracteres", tone: "text-lilac-400" };
+  let qualityBadge = {
+    text: "Mínimo 20 caracteres",
+    tone: "text-lilac-400",
+    Icon: null,
+  };
   if (charLen >= 20 && !errors.description) {
     qualityBadge =
       charLen >= 65
-        ? { text: "★ Propuesta súper completa", tone: "text-ok" }
-        : { text: "✓ Descripción válida", tone: "text-cyan-300" };
+        ? { text: "Propuesta súper completa", tone: "text-ok", Icon: Sparkles }
+        : { text: "Descripción válida", tone: "text-cyan-300", Icon: Check };
   }
+  const BadgeIcon = qualityBadge.Icon;
 
   return (
     <div className="space-y-4">
-      {/* Chips inteligentes de autocompletado según el rubro elegido */}
       {suggestions.length > 0 ? (
         <div>
           <span className="block text-xs font-semibold text-lilac-300">
@@ -488,9 +492,12 @@ export function StandStepProposal({
         counter={`${form.description.length}/240`}
         rightSlot={
           <span
-            className={`whitespace-nowrap text-[11px] font-semibold ${qualityBadge.tone}`}
+            className={`inline-flex items-center gap-1 whitespace-nowrap text-[11px] font-semibold ${qualityBadge.tone}`}
           >
-            {qualityBadge.text}
+            {BadgeIcon ? (
+              <BadgeIcon className="h-3 w-3" aria-hidden="true" />
+            ) : null}
+            <span>{qualityBadge.text}</span>
           </span>
         }
         hint="Mencioná qué líneas o artículos vendés para cuidar la variedad entre puestos."
@@ -511,7 +518,6 @@ export function StandStepProposal({
         )}
       </ValidatedField>
 
-      {/* Aceptación obligatoria de alcance transparente */}
       <div
         className={`rounded-md border p-3.5 transition-colors ${
           touched.acceptedTerms && errors.acceptedTerms
