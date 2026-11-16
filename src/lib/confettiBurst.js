@@ -30,3 +30,6 @@ export async function fireTokyoConfetti(options = {}) {
     // Ignorar silenciosamente si el canvas no está disponible
   }
 }
+
+export const confettiBurst = fireTokyoConfetti;
+export default fireTokyoConfetti;
