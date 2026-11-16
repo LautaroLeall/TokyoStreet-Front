@@ -192,3 +192,33 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
 - **Créditos de Desarrollo y Dominio Propio Unificado (`event.config.js`, `SiteFooter.jsx`)**:
   - Unificación de los servicios profesionales y portafolio de Lautaro Leal bajo el nuevo dominio oficial propio **`https://lautarolealdev.com`**.
   - Footer oficial actualizado con link dual minimalista en una sola línea: **`Lautaro Leal · lautarolealdev.com`** con transiciones neón cian/rosa, accesibilidad y etiquetas dinámicas de cursor (`DEV` y `WEB`).
+
+---
+
+## [2026-11-14] — Cierre Integral Fases 1, 2 y 3: Normalización Backend/Frontend, UX de Pasaporte/Stand y Herramientas Administrativas en `/org`
+
+- **Fase 1 · Homologación del Contrato JSON Mock ↔ Supabase (`passportService.js`, `staffService.js`, `RedeemTokenPage.jsx`)**:
+  - Normalización automática mediante `normalizePassportResponse()` para garantizar que el Frontend consuma la misma estructura tanto en Modo Demostración (sin costo de nube) como al conectar las RPCs de PostgreSQL (`progress`, `stamp_count`, `winner`/`ticket`, `stamp`/`stand`, `prize_status`).
+  - Mapa completo de códigos de error oficiales (`04_FUNCIONES_Y_REGLAS.md` §6: `code_expired`, `code_already_used`, `code_revoked`, `invalid_code`, `already_stamped`, `stand_disabled`, `game_not_open`, etc.) en `/s/:token`, junto con soporte para el estado `exhausted` (15 sellos completados cuando el cupo de premios ya se agotó).
+- **Fase 2 · Mejoras de Experiencia en `/pasaporte`, `/s/:token` y `/stand`**:
+  - **Detector de Navegador Integrado (`E4-5`)**: Banner preventivo en `/pasaporte` y `/s/:token` cuando el asistente abre el link dentro de Instagram, WhatsApp, Facebook o TikTok WebView, recomendando abrir en Chrome o Safari para no perder la sesión de su libreta.
+  - **Inspección de Sellos Acreditados (`E4-2`, `HankoStamp.jsx`, `PassportEntryPage.jsx`)**: Al tocar cualquier casillero sellado en la Libreta Oficial se despliega una tarjeta con el número y nombre del puesto, categoría/rubro, método de acreditación (`QR en puesto` o `PIN 6 dígitos`) y hora exacta.
+  - **Ticket Ganador con Reloj Anti-Captura (`06_DISENO_UI_UX.md` §5.3, `WinnerTicketModal.jsx`)**: Reloj digital en tiempo real con segundos (`HH:MM:SS`), fecha y hora de emisión y leyenda de verificación en Mesa 70.
+  - **Panel de Stand con Sondeo en Vivo y WakeLock (`E5-2`, `StandPanelPage.jsx`)**: Sondeo cada 3.5 s mediante `standCheckToken` que muestra el overlay verde `"✔ Sello acreditado"` durante 2 s cuando el cliente escanea el QR, activa `navigator.wakeLock` para evitar que se apague la pantalla del celular del feriante, cambia el color del contador en los últimos 15 s / 5 s y aclara honestamente que las métricas reflejan sellos entregados y no ventas cobradas.
+- **Fase 3 · Herramientas Operativas Completas en `/org` (`OrgPanelPage.jsx`)**:
+  - **Solapa Control (`E6-3`, `E6-6`)**: Edición directa del **Cupo Máximo de Premios (`prize_cap`)** y panel de supervisión de los **Últimos Códigos QR Emitidos** con botón para revocar tokens activos al instante.
+  - **Solapa Stands (`E6-4`, `E6-5`)**: Formulario desplegable para crear o editar stands individuales (`orgUpsertStand`), importador masivo por **CSV** (`orgImportStands`) y generador/descargador en CSV de los **70 accesos de feriantes** (`stand01@tokyostreet.com.ar` … `stand70@tokyostreet.com.ar`) conectado a la Edge Function `admin-create-stand-users`.
+  - **Solapa Ganadores (`E6-9`)**: Botón **Exportar CSV** con codificación UTF-8 BOM para abrir directamente en Excel con orden de llegada, código `TS-XXXX-XXXX`, nombre, DNI, WhatsApp, estado y fecha de entrega.
+
+---
+
+## [2026-11-15] — Modularización Integral (< 500 Líneas por Archivo) y Estandarización 100% Vectorial con `lucide-react`
+
+- **Desacoplamiento en Hooks, Utilidades, Servicios y Subcomponentes (< 500 líneas por módulo)**:
+  - **Sección de Stands (`StandsSection.jsx`: de 653 a 376 líneas)**: Extracción de toda la lógica del wizard de 3 pasos, validaciones por paso, persistencia en `sessionStorage` y formateo de WhatsApp al custom hook `src/hooks/useStandInquiryWizard.js` (276 líneas), y compactación de `StandWizardSteps.jsx` (490 líneas).
+  - **Pasaporte Digital (`PassportEntryPage.jsx`: de 1.005 a 452 líneas)**: Separación de la libreta oficial en vivo e inspector de sellos en `src/features/passport/components/PassportLiveBookTab.jsx` (255 líneas) y del simulador 3D y guía paso a paso en `src/features/passport/components/PassportSimulatorAndGuideTabs.jsx` (215 líneas).
+  - **Panel de Stand (`StandPanelPage.jsx`: de 873 a 335 líneas)**: Extracción del ciclo de vida del QR de 75 s, sondeo en vivo (`standCheckToken` cada 3.5 s), `navigator.wakeLock`, modo Tótem y canje por PIN a `src/hooks/useStandCounter.js` (246 líneas), y separación de las vistas de login y mostrador QR en `src/features/stand/components/StandCounterViews.jsx` (267 líneas).
+  - **Panel de Organización (`OrgPanelPage.jsx`: de 1.866 a 375 líneas)**: Extracción de exportadores y parser CSV a `src/lib/csvExport.js` (75 líneas), estado y acciones administrativas a `src/hooks/useOrgDashboard.js` (402 líneas), solapas de Mesa 70 y Control Global a `src/features/org/components/OrgMesaAndControlTabs.jsx` (495 líneas) y solapas de 70 Stands y Ganadores a `src/features/org/components/OrgStandsAndWinnersTabs.jsx` (426 líneas).
+  - **Capa de Servicios (`staffService.js`: de 1.444 a 499 líneas | `passportService.js`: de 578 a 430 líneas)**: Extracción del catálogo semilla de 70 stands, almacén en memoria y persistencia mock a `src/services/mockEventStore.js` (234 líneas) y unificación de invocaciones RPC mediante `callStaffRpc`.
+- **Eliminación Total de Emojis y Símbolos Improvisados (`0 emojis` en `src/`)**:
+  - Reemplazo de todos los emojis y glifos Unicode en `whatsapp.js`, `StandWizardSteps.jsx`, `ValidatedField.jsx`, `WinnerTicketModal.jsx`, `PassportLiveBookTab.jsx`, `StandCounterViews.jsx`, `OrgMesaAndControlTabs.jsx` y `OrgStandsAndWinnersTabs.jsx` por íconos vectoriales de `lucide-react` (`Zap`, `Check`, `CheckCircle2`, `Sparkles`, `X`, `RefreshCw`, `ArrowRight`, `Plus`) y viñetas tipográficas limpias (`•`).
