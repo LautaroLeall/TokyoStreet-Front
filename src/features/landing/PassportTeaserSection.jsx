@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Clock,
-  RotateCcw,
-  ShieldCheck,
-  Sparkles,
-  Stamp,
-  Trophy,
-} from "lucide-react";
+import { RotateCcw, ShieldCheck, Sparkles, Stamp, Trophy } from "lucide-react";
 import { EVENT_CONFIG } from "@/content/event.config";
 import { HankoStamp } from "@/components/ui/HankoStamp";
-import { HexBadge } from "@/components/ui/HexBadge";
 import { NeonButton } from "@/components/ui/NeonButton";
 import {
   RevealBlock,
@@ -108,9 +100,6 @@ export function PassportTeaserSection() {
                   <span className="truncate whitespace-nowrap font-display text-sm uppercase tracking-wider text-white sm:text-base">
                     Libreta 15 Sellos
                   </span>
-                  <HexBadge tone={isLive ? "ok" : "warn"} icon={Clock}>
-                    {isLive ? "Juego activo" : passportTeaser.beforeEventBadge}
-                  </HexBadge>
                 </div>
 
                 <div className="mt-4">
