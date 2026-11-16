@@ -1,7 +1,7 @@
 /**
  * ÚNICA FUENTE DE CONTENIDO — TOKYO STREET 3.ª EDICIÓN
  * Ningún componente debe tener textos, precios, premios, contactos ni horarios
- * hardcodeados. Para actualizar preventas, links, jurados o el cronograma del
+ * hardcodeados. Para actualizar preventas, links, jurados o el cronograma del evento
  */
 
 export const EVENT_CONFIG = {
@@ -263,7 +263,7 @@ export const EVENT_CONFIG = {
     currencyNote: "ARS · Valor por persona",
     online: {
       badge: "Canal Online Oficial",
-      title: "Entrada virtual vía WhatsApp",
+      title: "Entrada virtual",
       contactName: "Sahra Luna",
       role: "Organización Tokyo Street",
       phone: "5493813332116",
@@ -633,7 +633,7 @@ export const EVENT_CONFIG = {
           "Evaluado en escenario por Ivy, Sabb y Lucy.",
         ],
         jurorContacts: ["sahraLuna"],
-        jurorDisplay: "Ivy, Sabb y Lucy (Quantum) · Coordina Sahra Luna",
+        jurorDisplay: "Ivy, Sabb y Lucy (Quantum)",
         jurorAvatars: [
           { name: "Ivy", src: "/lineup/jurado-kpop-ivy.webp" },
           { name: "Sabb", src: "/lineup/jurado-kpop-sabb.webp" },
