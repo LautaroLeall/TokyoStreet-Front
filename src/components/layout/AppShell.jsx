@@ -13,6 +13,13 @@ export function AppShell({ children }) {
   const { pathname } = useLocation();
   const isLanding = pathname === "/";
   const isNotFound = !isKnownAppRoute(pathname);
+  const isOperationalPanel =
+    pathname === "/org" ||
+    pathname === "/stand" ||
+    pathname.startsWith("/org/") ||
+    pathname.startsWith("/stand/") ||
+    pathname.startsWith("/s/");
+  const hideNavAndFooter = isNotFound || isOperationalPanel;
 
   return (
     <div className="relative flex min-h-dvh flex-col bg-navy-950 text-white">
@@ -32,11 +39,11 @@ export function AppShell({ children }) {
         />
       </div>
 
-      {!isNotFound ? <TopNavbar /> : null}
+      {!hideNavAndFooter ? <TopNavbar /> : null}
 
       <div className="relative z-10 flex flex-1 flex-col">{children}</div>
 
-      {!isNotFound ? <SiteFooter /> : null}
+      {!hideNavAndFooter ? <SiteFooter /> : null}
     </div>
   );
 }
