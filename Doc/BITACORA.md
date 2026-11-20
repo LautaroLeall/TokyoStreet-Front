@@ -222,3 +222,13 @@ Registro cronológico de entregas, decisiones de interfaz, optimizaciones y prue
   - **Capa de Servicios (`staffService.js`: de 1.444 a 499 líneas | `passportService.js`: de 578 a 430 líneas)**: Extracción del catálogo semilla de 70 stands, almacén en memoria y persistencia mock a `src/services/mockEventStore.js` (234 líneas) y unificación de invocaciones RPC mediante `callStaffRpc`.
 - **Eliminación Total de Emojis y Símbolos Improvisados (`0 emojis` en `src/`)**:
   - Reemplazo de todos los emojis y glifos Unicode en `whatsapp.js`, `StandWizardSteps.jsx`, `ValidatedField.jsx`, `WinnerTicketModal.jsx`, `PassportLiveBookTab.jsx`, `StandCounterViews.jsx`, `OrgMesaAndControlTabs.jsx` y `OrgStandsAndWinnersTabs.jsx` por íconos vectoriales de `lucide-react` (`Zap`, `Check`, `CheckCircle2`, `Sparkles`, `X`, `RefreshCw`, `ArrowRight`, `Plus`) y viñetas tipográficas limpias (`•`).
+
+---
+
+## [2026-11-20] — Incorporación Oficial de Martín Cancino como Jurado del Concurso de Dibujo
+
+- **Cartelera de Invitados y Jurados (`event.config.js`, `LineupSection.jsx`)**:
+  - Incorporación del ilustrador y caricaturista **Martín Cancino** (`@martincancinoarte`) como **10.ª figura confirmada** del Lineup oficial (`kanji: "画"`, especialidad `Ilustrador & Caricaturista`, flyer oficial `/lineup/jurado-dibujo-martin.webp`).
+  - Nueva pestaña de filtrado **`Jurado Dibujo`** (`group: "dibujo"`) en la sección `#invitados` con enlace directo al concurso y a su perfil oficial de Instagram (`https://www.instagram.com/martincancinoarte/`).
+- **Sección de Concursos (`event.config.js`, `ContestsSection.jsx`)**:
+  - Actualización de la ficha del **Concurso de Dibujo** con el avatar circular de **Martín Cancino**, etiqueta `Jurado: Martín Cancino`, enlace a `@martincancinoarte` y mantenimiento del canal de inscripción web coordinado vía WhatsApp con **Sahra Luna**.
