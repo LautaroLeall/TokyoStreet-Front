@@ -383,18 +383,19 @@ export const EVENT_CONFIG = {
     },
   },
 
-  // Cartelera oficial de Invitados Especiales y Jurados (9 figuras confirmadas)
+  // Cartelera oficial de Invitados Especiales y Jurados (10 figuras confirmadas)
   lineup: {
     eyebrow: "Talento en escena",
     title: "Invitados especiales y jurados",
     subtitle:
-      "Artistas en vivo, referentes del cosplay, integrantes de Quantum y voces invitadas que encenderán la tercera edición.",
+      "Artistas en vivo, referentes del cosplay, integrantes de Quantum, ilustración y voces invitadas que encenderán la tercera edición.",
     filters: [
       { id: "all", label: "Todos" },
       { id: "guests", label: "Invitados especiales" },
       { id: "kpop", label: "Jurado K-Pop" },
       { id: "cosplay", label: "Jurado Cosplay" },
       { id: "canto", label: "Jurado Canto" },
+      { id: "dibujo", label: "Jurado Dibujo" },
     ],
     members: [
       {
@@ -495,6 +496,19 @@ export const EVENT_CONFIG = {
         image: "/lineup/jurado-canto-pola.webp",
         contestId: "canto",
         bio: "Su talento y dedicación a la música la suman al jurado oficial para descubrir y celebrar a las mejores voces amateurs del festival.",
+      },
+      {
+        id: "martin-cancino",
+        group: "dibujo",
+        kanji: "画",
+        name: "Martín Cancino",
+        role: "Jurado Concurso de Dibujo",
+        specialty: "Ilustrador & Caricaturista",
+        image: "/lineup/jurado-dibujo-martin.webp",
+        contestId: "dibujo",
+        instagramHandle: "@martincancinoarte",
+        instagramUrl: "https://www.instagram.com/martincancinoarte/",
+        bio: "Ilustrador y caricaturista. Llega a Tokyo Street para aportar toda su experiencia y acompañar a nuestros artistas en una jornada llena de creatividad y talento.",
       },
     ],
   },
@@ -663,17 +677,21 @@ export const EVENT_CONFIG = {
         requirements: [
           "Temática libre · ¡Demostrá tu talento, técnica y creatividad!",
           "No importa si recién empezás o si ya llevás años dibujando.",
-          "Inscripción coordinada por WhatsApp con Sahra Luna.",
-          "Para participar es obligatorio contar con entrada al evento.",
+          "Evaluado por el ilustrador y caricaturista Martín Cancino.",
+          "Inscripción coordinada por WhatsApp con Sahra Luna",
         ],
         jurorContacts: ["sahraLuna"],
-        jurorPrefix: "Coordina",
-        jurorDisplay: "Sahra Luna",
+        jurorDisplay: "Martín Cancino",
         jurorInstagram: {
-          handle: "@tokyostreet.tuc",
-          url: "https://www.instagram.com/tokyostreet.tuc/",
+          handle: "@martincancinoarte",
+          url: "https://www.instagram.com/martincancinoarte/",
         },
-        jurorAvatars: [],
+        jurorAvatars: [
+          {
+            name: "Martín Cancino",
+            src: "/lineup/jurado-dibujo-martin.webp",
+          },
+        ],
         fields: {
           stageNameLabel: "Nombre artístico o firma",
           stageNamePlaceholder: "Ej. @tu_firma / Nombre y apellido",
